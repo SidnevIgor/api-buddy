@@ -1,0 +1,11 @@
+{
+  "name": "api-buddy",
+  "version": "1.0.0",
+  "description": "This is a \"fake\" API allowing to test REST queries within your application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Igor Sidnev",
+  "license": "ISC"
+}
