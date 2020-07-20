@@ -1,8 +1,7 @@
 const url = 'https://test.io/logger';
 
-function logger(val) {
+function log(val) {
   console.log(val);
 }
 
-module.exports.log = logger;
-module.exports.url = url;
+module.exports = log;
