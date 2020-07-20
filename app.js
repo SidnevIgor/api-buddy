@@ -1,5 +1,5 @@
-let log = require('./logger');
-log('message');
+//let log = require('./logger');
+//log('message');
 
 
 //Standard Node packages
@@ -34,3 +34,14 @@ logger.on('messageLogged', function() {
   console.log('Message has been logged!');
 });
 logger.log('Hello!');
+
+//HTTP Service Native
+const http = require('http');
+const server = http.createServer((req,res) => {
+  if (req.url === '/') {
+    res.write('Service envoked!');
+    res.end();
+  }
+});
+server.listen(3000);
+console.log('Listening on port 3000');
