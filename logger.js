@@ -1,7 +1,9 @@
-const url = 'https://test.io/logger';
+const EventEmitter = require('events');
 
-function log(val) {
-  console.log(val);
+class Logger extends EventEmitter{
+  log(message) {
+    this.emit('Message emitted: ', message);
+  }
 }
 
-module.exports = log;
+module.exports = Logger;

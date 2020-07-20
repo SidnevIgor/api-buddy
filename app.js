@@ -25,3 +25,12 @@ fs.readdir('./', (err, files) => {
      console.log(files);
   }
 });
+
+//Events handling
+const Logger = require('./logger');
+const logger = new Logger();
+
+logger.on('messageLogged', function() {
+  console.log('Message has been logged!');
+});
+logger.log('Hello!');
