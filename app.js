@@ -45,3 +45,8 @@ const server = http.createServer((req,res) => {
 });
 server.listen(3000);
 console.log('Listening on port 3000');
+
+//Using external package - underscore
+const _ = require('underscore');
+let check = _.contains([1, 2, 3], 3);
+console.log(check);
