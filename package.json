@@ -9,6 +9,7 @@
   "author": "Igor Sidnev",
   "license": "ISC",
   "dependencies": {
+    "mongoose": "^5.9.25",
     "underscore": "^1.10.2"
   }
 }
