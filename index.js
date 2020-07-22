@@ -1,41 +1,4 @@
-const express = require('express');
-const app = express();
-app.use(express.json()); //enabling JSON parsing
-
-const Joi = require('joi'); //validation package
-
-const courses = [
-  { id: 1, name: 'course1' },
-  { id: 2, name: 'course2' },
-  { id: 3, name: 'course3' },
-];
-
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-app.get('/api/courses', (req, res) => {
-  res.send(courses);
-});
-app.get('/api/courses/:id', (req, res) => {
-  let course = courses.find((c) => c.id === parseInt(req.params.id));
-  if(!course) res.status(404).send('There is no course with such id');
-  res.send(course);
-});
-
-app.post('/api/courses', (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string().required()
-  }); //here we describe the schema of Joi
-  const validation = schema.validate(req.body); //here we validate the schema and req.body
-  if(validation.error) res.status(400).send(validation.error);
-
-  let course = {
-    id: courses.length + 1,
-    name: req.body.name
-  }
-  courses.push(course);
-  res.send(course);
-});
+const app = require('./courses/courses');
 
 const port = process.env.PORT || 3000; //getting local variables
 app.listen(port);
