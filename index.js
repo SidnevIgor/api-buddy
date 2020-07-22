@@ -24,7 +24,7 @@ app.get('/api/courses/:id', (req, res) => {
 
 app.post('/api/courses', (req, res) => {
   const schema = Joi.object({
-    name: Joi.string().min(1).required()
+    name: Joi.string().required()
   }); //here we describe the schema of Joi
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) res.status(400).send(validation.error);
