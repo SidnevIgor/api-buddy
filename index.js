@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 app.use(express.json()); //enabling JSON parsing
 
+const Joi = require('joi'); //validation package
+
+
 const courses = [
   { id: 1, name: 'course1' },
   { id: 2, name: 'course2' },
@@ -12,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 app.get('/api/courses', (req, res) => {
-  res.send([1,2,3]);
+  res.send(courses);
 });
 app.get('/api/courses/:id', (req, res) => {
   let course = courses.find((c) => c.id === parseInt(req.params.id));
