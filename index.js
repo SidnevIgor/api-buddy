@@ -4,7 +4,6 @@ app.use(express.json()); //enabling JSON parsing
 
 const Joi = require('joi'); //validation package
 
-
 const courses = [
   { id: 1, name: 'course1' },
   { id: 2, name: 'course2' },
@@ -24,6 +23,12 @@ app.get('/api/courses/:id', (req, res) => {
 });
 
 app.post('/api/courses', (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string().min(1).required()
+  }); //here we describe the schema of Joi
+  const validation = schema.validate(req.body); //here we validate the schema and req.body
+  if(validation.error) res.status(400).send(validation.error);
+
   let course = {
     id: courses.length + 1,
     name: req.body.name
