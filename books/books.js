@@ -4,13 +4,17 @@ const router = express.Router();
 const Joi = require('joi'); //validation package
 
 const books = [
-  { id: 1, name: 'book1' },
-  { id: 2, name: 'book2' },
-  { id: 3, name: 'book3' },
+  { id: 1, title: 'book1', author: 'auth1', genre: 'Romance', issueDate: '10.10.2020', publisher: 'Alpina' },
+  { id: 2, title: 'book2', author: 'auth2', genre: 'Romance', issueDate: '11.10.2020', publisher: 'Alpina' },
+  { id: 3, title: 'book3', author: 'auth3', genre: 'Romance', issueDate: '12.10.2020', publisher: 'Alpina' },
 ];
 
 const schema = Joi.object({
-  name: Joi.string().required()
+  title: Joi.string().required(),
+  author: Joi.string().required().pattern(new RegExp('^[a-zA-Z]{2,}(?: [a-zA-Z]+){0,2}$')),
+  genre: Joi.string().required(),
+  issueDate: Joi.date().required(),
+  publisher: Joi.string().required()
 }); //here we describe the schema of Joi
 
 
@@ -29,7 +33,11 @@ router.post('/', (req, res) => {
 
   let book = {
     id: books.length + 1,
-    name: req.body.name
+    title: req.body.title,
+    author: req.body.author,
+    genre: req.body.genre,
+    issueDate: req.body.issueDate,
+    publisher: req.body.publisher
   }
   books.push(book);
   res.send(book);
@@ -48,7 +56,7 @@ router.put('/:id', (req, res) => {
     return;
   }
 
-  book.name = req.body.name;
+  book.title = req.body.title;
   res.send(book);
 });
 
