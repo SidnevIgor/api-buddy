@@ -3,10 +3,10 @@ const router = express.Router();
 
 const Joi = require('joi'); //validation package
 
-const courses = [
-  { id: 1, name: 'course1' },
-  { id: 2, name: 'course2' },
-  { id: 3, name: 'course3' },
+const books = [
+  { id: 1, name: 'book1' },
+  { id: 2, name: 'book2' },
+  { id: 3, name: 'book3' },
 ];
 
 const schema = Joi.object({
@@ -15,24 +15,24 @@ const schema = Joi.object({
 
 
 router.get('/', (req, res) => {
-  res.send(courses);
+  res.send(books);
 });
 router.get('/:id', (req, res) => {
-  let course = courses.find((c) => c.id === parseInt(req.params.id));
-  if(!course) res.status(404).send('There is no course with such id');
-  res.send(course);
+  let book = books.find((c) => c.id === parseInt(req.params.id));
+  if(!book) res.status(404).send('There is no book with such id');
+  res.send(book);
 });
 
 router.post('/', (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { res.status(400).send(validation.error); return; }
 
-  let course = {
-    id: courses.length + 1,
+  let book = {
+    id: books.length + 1,
     name: req.body.name
   }
-  courses.push(course);
-  res.send(course);
+  books.push(book);
+  res.send(book);
 });
 
 router.put('/:id', (req, res) => {
@@ -42,26 +42,26 @@ router.put('/:id', (req, res) => {
     return;
   }
 
-  let course = courses.find((c) => c.id === parseInt(req.params.id));
-  if(!course) {
-    res.status(400).send('There is no course with a chosen id');
+  let book = books.find((c) => c.id === parseInt(req.params.id));
+  if(!book) {
+    res.status(400).send('There is no book with a chosen id');
     return;
   }
 
-  course.name = req.body.name;
-  res.send(course);
+  book.name = req.body.name;
+  res.send(book);
 });
 
 router.delete('/:id', (req, res) => {
-  let course = courses.find((c) => c.id === parseInt(req.params.id));
-  if(!course) {
-    res.status(400).send('There is no course with a chosen id');
+  let book = books.find((c) => c.id === parseInt(req.params.id));
+  if(!book) {
+    res.status(400).send('There is no book with a chosen id');
     return;
   }
 
-  let index = courses.indexOf(course);
-  courses.splice(index, 1);
-  res.send(course);
+  let index = books.indexOf(book);
+  books.splice(index, 1);
+  res.send(book);
 });
 
 module.exports = router;

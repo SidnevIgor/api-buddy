@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 
-const courses = require('./courses/courses');
+const books = require('./books/books');
 
 app.use(express.json()); //enabling JSON parsing
-app.use('/api/courses', courses);
+app.use('/api/books', books);
 
 const port = process.env.PORT || 3000; //getting local variables
 app.listen(port);
