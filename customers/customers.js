@@ -12,7 +12,7 @@ const customers = [
 const schema = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
-  email: Joi.email(),
+  email: Joi.string(),
   tel: Joi.string().required()
 }); //here we describe the schema of Joi
 
@@ -32,11 +32,10 @@ router.post('/', (req, res) => {
 
   let customer = {
     id: customers.length + 1,
-    title: req.body.title,
-    author: req.body.author,
-    genre: req.body.genre,
-    issueDate: req.body.issueDate,
-    publisher: req.body.publisher
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    tel: req.body.tel
   }
   customers.push(customer);
   res.send(customer);
