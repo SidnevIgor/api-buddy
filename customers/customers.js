@@ -54,7 +54,10 @@ router.put('/:id', (req, res) => {
     return;
   }
 
-  customer.title = req.body.title;
+  customer.firstName = req.body.firstName;
+  customer.lastName = req.body.lastName;
+  customer.email = req.body.email;
+  customer.tel = req.body.tel;
   res.send(customer);
 });
 
