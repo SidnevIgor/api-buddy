@@ -16,11 +16,15 @@ const orders = [
 ];
 
 const schema = Joi.object({
-  city: Joi.string().required(),
-  street: Joi.string().required(),
-  building: Joi.string(),
-  postcode: Joi.string().required(),
-  employees: Joi.array().items(Joi.number())
+  date: Joi.date().required(),
+  employeeId: Joi.number().required(),
+  customerId: Joi.number().required(),
+  orderTotal: Joi.number().required(),
+  books: Joi.array().items(Joi.object({
+    id: Joi.number().required(),
+    quantity: Joi.number().required(),
+    cost: Joi.number().required()
+  }))
 }); //here we describe the schema of Joi
 
 
@@ -39,11 +43,17 @@ router.post('/', (req, res) => {
 
   let order = {
     id: orders.length + 1,
-    city: req.body.city,
-    street: req.body.street,
-    building: req.body.building,
-    postcode: req.body.postcode,
-    employees: req.body.employees
+    date: req.body.date,
+    employeeId: req.body.employeeId,
+    customerId: req.body.customerId,
+    orderTotal: req.body.orderTotal,
+    books: [
+      {
+        id: req.body.books.id,
+        quantity: req.body.books.quantity,
+        cost: req.body.books.cost
+      }
+    ]
   }
   orders.push(order);
   res.send(order);
