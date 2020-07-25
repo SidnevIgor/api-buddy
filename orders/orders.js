@@ -3,10 +3,16 @@ const router = express.Router();
 
 const Joi = require('joi'); //validation package
 
+let book = {
+  id: 1,
+  quantity: 1,
+  cost: 100
+};
+
 const orders = [
-  { id: 1, city: 'name1', street: 'lname1', building: 'test@gmail.com', postcode: '123-456-789', employees: [] },
-  { id: 2, city: 'name2', street: 'lname2', building: 'test@gmail.com', postcode: '123-456-789', employees: [] },
-  { id: 3, city: 'name3', street: 'lname3', building: 'test@gmail.com', postcode: '123-456-789', employees: [] }
+  { id: 1, date: '01.01.2010', employeeId: '1', customerId: '1', orderTotal: '100', books: [book] },
+  { id: 2, date: '01.01.2010', employeeId: '2', customerId: '2', orderTotal: '111', books: [book] },
+  { id: 3, date: '01.01.2010', employeeId: '3', customerId: '3', orderTotal: '112', books: [book] }
 ];
 
 const schema = Joi.object({
