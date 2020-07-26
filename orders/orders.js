@@ -20,11 +20,7 @@ const schema = Joi.object({
   employeeId: Joi.number().required(),
   customerId: Joi.number().required(),
   orderTotal: Joi.number().required(),
-  books: Joi.array().items(Joi.object({
-    id: Joi.number().required(),
-    quantity: Joi.number().required(),
-    cost: Joi.number().required()
-  }))
+  books: Joi.array().items()
 }); //here we describe the schema of Joi
 
 
@@ -48,11 +44,7 @@ router.post('/', (req, res) => {
     customerId: req.body.customerId,
     orderTotal: req.body.orderTotal,
     books: [
-      {
-        id: req.body.books.id,
-        quantity: req.body.books.quantity,
-        cost: req.body.books.cost
-      }
+      ...req.body.books
     ]
   }
   orders.push(order);
@@ -72,11 +64,11 @@ router.put('/:id', (req, res) => {
     return;
   }
 
-  order.city = req.body.city;
-  order.street = req.body.street;
-  order.building = req.body.building;
-  order.postcode = req.body.postcode;
-  order.employees = req.body.employees;
+  order.date = req.body.date;
+  order.employeeId = req.body.employeeId;
+  order.customerId = req.body.customerId;
+  order.orderTotal = req.body.orderTotal;
+  order.books = req.body.books;
   res.send(order);
 });
 
