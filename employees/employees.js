@@ -4,9 +4,9 @@ const router = express.Router();
 const Joi = require('joi'); //validation package
 
 const employees = [
-  { id: 1, firstName: 'Igor', lastName: 'Sidnev', storeId: '1', position: 'manager' },
-  { id: 2, firstName: 'Egor', lastName: 'Tupchik', storeId: '2', position: 'manager' },
-  { id: 3, firstName: 'Vgor', lastName: 'Larchik', storeId: '3', position: 'manager' }
+  { id: 1, firstName: 'Igor', lastName: 'Sidnev', storeId: 1, position: 'manager' },
+  { id: 2, firstName: 'Egor', lastName: 'Tupchik', storeId: 2, position: 'manager' },
+  { id: 3, firstName: 'Vgor', lastName: 'Larchik', storeId: 3, position: 'manager' }
 ];
 
 const schema = Joi.object({
@@ -58,7 +58,7 @@ router.put('/:id', (req, res) => {
   employee.lastName = req.body.lastName;
   employee.storeId = req.body.storeId;
   employee.position = req.body.position;
-  
+
   res.send(employee);
 });
 
