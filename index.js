@@ -8,6 +8,10 @@ const orders = require('./orders/orders');
 const employees = require('./employees/employees');
 
 app.use(express.json()); //enabling JSON parsing
+app.use(function(req,res,next) {
+  console.log('Logging...');
+  next();
+})
 app.use('/api/books', books);
 app.use('/api/customers', customers);
 app.use('/api/stores', stores);
