@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-const logger = require('./logger/logger.js'); //adding custom middleware function
 const helmet = require('helmet');
 const books = require('./books/books');
 const customers = require('./customers/customers');
@@ -10,7 +9,6 @@ const orders = require('./orders/orders');
 const employees = require('./employees/employees');
 
 app.use(express.json()); //enabling JSON parsing
-app.use(logger);
 app.use(helmet());
 app.use('/api/books', books);
 app.use('/api/customers', customers);
