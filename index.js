@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+const logger = require('./logger/logger.js');
 const books = require('./books/books');
 const customers = require('./customers/customers');
 const stores = require('./stores/stores');
@@ -8,10 +9,7 @@ const orders = require('./orders/orders');
 const employees = require('./employees/employees');
 
 app.use(express.json()); //enabling JSON parsing
-app.use(function(req,res,next) {
-  console.log('Logging...');
-  next();
-})
+app.use(logger);
 app.use('/api/books', books);
 app.use('/api/customers', customers);
 app.use('/api/stores', stores);
