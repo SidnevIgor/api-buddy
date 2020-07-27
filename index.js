@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+const config = require('config');
 const helmet = require('helmet');
 const books = require('./books/books');
 const customers = require('./customers/customers');
@@ -19,3 +20,4 @@ app.use('/api/employees', employees);
 const port = process.env.PORT || 3000; //getting local variables
 app.listen(port);
 console.log(`Listening on port ${port}`);
+console.log(`Environment: ${config.get('name')}`)
