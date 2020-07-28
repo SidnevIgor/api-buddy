@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
+const config = require('config'); //allows to use local variables
+const helmet = require('helmet'); //protecting routes
 
-const config = require('config');
-const helmet = require('helmet');
+const home = require('./home/home');
 const books = require('./books/books');
 const customers = require('./customers/customers');
 const stores = require('./stores/stores');
@@ -16,6 +17,7 @@ app.use('/api/customers', customers);
 app.use('/api/stores', stores);
 app.use('/api/orders', orders);
 app.use('/api/employees', employees);
+app.use('/', home);
 
 const port = process.env.PORT || 3000; //getting local variables
 app.listen(port);
