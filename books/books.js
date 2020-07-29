@@ -2,13 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 const mongoose = require('mongoose');
-const bookSchema = new mongoose.Schema({
+const bookSchema = new mongoose.Schema({ //here we create a mongoose schema
   title: String,
   author: String,
   genre: String,
   issueDate: { type: Date, default: Date.now },
   publisher: String
 });
+
+const Book = mongoose.model('Book', bookSchema); //here we create a class based on mongoose schema
 
 const Joi = require('joi'); //validation package
 
@@ -27,7 +29,8 @@ const schema = Joi.object({
 }); //here we describe the schema of Joi
 
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  let books = await Book.find();
   res.send(books);
 });
 router.get('/:id', (req, res) => {
@@ -36,20 +39,20 @@ router.get('/:id', (req, res) => {
   res.send(book);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { res.status(400).send(validation.error); return; }
 
-  let book = {
+  let book = new Book({
     id: books.length + 1,
     title: req.body.title,
     author: req.body.author,
     genre: req.body.genre,
     issueDate: req.body.issueDate,
     publisher: req.body.publisher
-  }
-  books.push(book);
-  res.send(book);
+  });
+  const result = await book.save();
+  res.send(result);
 });
 
 router.put('/:id', (req, res) => {
