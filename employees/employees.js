@@ -3,6 +3,14 @@ const router = express.Router();
 
 const Joi = require('joi'); //validation package
 
+const mongoose = require('mongoose');
+const employeeSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
+  storeId: Number,
+  position: String
+});
+
 const employees = [
   { id: 1, firstName: 'Igor', lastName: 'Sidnev', storeId: 1, position: 'manager' },
   { id: 2, firstName: 'Egor', lastName: 'Tupchik', storeId: 2, position: 'manager' },

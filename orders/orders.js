@@ -3,6 +3,14 @@ const router = express.Router();
 
 const Joi = require('joi'); //validation package
 
+const mongoose = require('mongoose');
+const orderSchema = new mongoose.Schema({
+  date: String,
+  employeeId: Number,
+  customerId: Number,
+  orderTotal: Number
+});
+
 let book = {
   id: 1,
   quantity: 1,
@@ -10,9 +18,9 @@ let book = {
 };
 
 const orders = [
-  { id: 1, date: '01.01.2010', employeeId: '1', customerId: '1', orderTotal: '100', books: [book] },
-  { id: 2, date: '01.01.2010', employeeId: '2', customerId: '2', orderTotal: '111', books: [book] },
-  { id: 3, date: '01.01.2010', employeeId: '3', customerId: '3', orderTotal: '112', books: [book] }
+  { id: 1, date: '01.01.2010', employeeId: 1, customerId: 1, orderTotal: 100, books: [book] },
+  { id: 2, date: '01.01.2010', employeeId: 2, customerId: 2, orderTotal: 111, books: [book] },
+  { id: 3, date: '01.01.2010', employeeId: 3, customerId: 3, orderTotal: 112, books: [book] }
 ];
 
 const schema = Joi.object({

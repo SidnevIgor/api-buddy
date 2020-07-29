@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
+const mongoose = require('mongoose');
+const bookSchema = new mongoose.Schema({
+  title: String,
+  author: String,
+  genre: String,
+  issueDate: { type: Date, default: Date.now },
+  publisher: String
+});
+
 const Joi = require('joi'); //validation package
 
 const books = [

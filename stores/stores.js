@@ -3,6 +3,14 @@ const router = express.Router();
 
 const Joi = require('joi'); //validation package
 
+const mongoose = require('mongoose');
+const storeSchema = new mongoose.Schema({
+  city: String,
+  street: String,
+  building: String,
+  postcode: String
+});
+
 const stores = [
   { id: 1, city: 'name1', street: 'lname1', building: 'test@gmail.com', postcode: '123-456-789', employees: [] },
   { id: 2, city: 'name2', street: 'lname2', building: 'test@gmail.com', postcode: '123-456-789', employees: [] },
