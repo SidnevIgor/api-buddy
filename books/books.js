@@ -33,8 +33,8 @@ router.get('/', async (req, res) => {
   let books = await Book.find();
   res.send(books);
 });
-router.get('/:id', (req, res) => {
-  let book = books.find((c) => c.id === parseInt(req.params.id));
+router.get('/:id', async (req, res) => {
+  let book = await Book.findById(req.params.id);
   if(!book) res.status(404).send('There is no book with such id');
   res.send(book);
 });
