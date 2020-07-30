@@ -38,9 +38,7 @@ router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { res.status(400).send(validation.error); return; }
 
-  let book = new Book({
-    ...req.body
-  });
+  let book = new Book({...req.body});
   const result = await book.save();
   res.send(result);
 });
@@ -59,8 +57,8 @@ router.put('/:id', validateId, async (req, res) => {
   res.send(book);
 });
 
-router.delete('/:id', (req, res) => {
-  let book = books.deleteOne({"_id": req.params.id});
+router.delete('/:id', async (req, res) => {
+  let book = await Book.deleteOne({"_id": req.params.id});
   if(!book) {
     res.status(400).send('There is no book with a chosen id');
     return;
