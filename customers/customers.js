@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
   res.send(customer);
 });
 
-router.put('/:id', validateId, (req, res) => {
+router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
     res.status(400).send(validation.error);
@@ -61,8 +61,8 @@ router.put('/:id', validateId, (req, res) => {
   res.send(customer);
 });
 
-router.delete('/:id', validateId, (req, res) => {
-  let customer = Customer.deleteOne({"_id": req.params.id});
+router.delete('/:id', validateId, async (req, res) => {
+  let customer = await Customer.deleteOne({"_id": req.params.id});
   if(!customer) {
     res.status(400).send('There is no customer with a chosen id');
     return;
