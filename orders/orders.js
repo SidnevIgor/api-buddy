@@ -13,18 +13,6 @@ const orderSchema = new mongoose.Schema({
 });
 const Order = mongoose.model('Order', orderSchema);
 
-let book = {
-  id: 1,
-  quantity: 1,
-  cost: 100
-};
-
-const orders = [
-  { id: 1, date: '01.01.2010', employeeId: 1, customerId: 1, orderTotal: 100, books: [book] },
-  { id: 2, date: '01.01.2010', employeeId: 2, customerId: 2, orderTotal: 111, books: [book] },
-  { id: 3, date: '01.01.2010', employeeId: 3, customerId: 3, orderTotal: 112, books: [book] }
-];
-
 const schema = Joi.object({
   date: Joi.date().required(),
   employeeId: Joi.number().required(),
