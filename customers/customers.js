@@ -13,12 +13,6 @@ const customerSchema = new mongoose.Schema({
 });
 const Customer = mongoose.model('Customer', customerSchema);
 
-const customers = [
-  { id: 1, firstName: 'name1', lastName: 'lname1', email: 'test@gmail.com', tel: '123-456-789' },
-  { id: 2, firstName: 'name2', lastName: 'lname2', email: 'test@gmail.com', tel: '123-456-789' },
-  { id: 3, firstName: 'name3', lastName: 'lname3', email: 'test@gmail.com', tel: '123-456-789' }
-];
-
 const schema = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
