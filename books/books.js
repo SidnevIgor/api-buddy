@@ -56,20 +56,17 @@ router.post('/', async (req, res) => {
   res.send(result);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
     res.status(400).send(validation.error);
     return;
   }
-
-  let book = books.find((c) => c.id === parseInt(req.params.id));
+  let book = await Book.findOneAndUpdate({"_id":req.params.id}, {...req.body});
   if(!book) {
     res.status(400).send('There is no book with a chosen id');
     return;
   }
-
-  book.title = req.body.title;
   res.send(book);
 });
 
