@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Joi = require('joi'); //validation package
+const validateId = require('../middleware/validateId');
 
 const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
@@ -10,6 +11,7 @@ const orderSchema = new mongoose.Schema({
   customerId: Number,
   orderTotal: Number
 });
+const Order = mongoose.model('Order', orderSchema);
 
 let book = {
   id: 1,
@@ -32,63 +34,46 @@ const schema = Joi.object({
 }); //here we describe the schema of Joi
 
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  let orders = await Order.find();
   res.send(orders);
 });
-router.get('/:id', (req, res) => {
-  let order = orders.find((c) => c.id === parseInt(req.params.id));
+router.get('/:id', validateId, async (req, res) => {
+  let order = await Order.findById(req.params.id);
   if(!order) res.status(404).send('There is no order with such id');
   res.send(order);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { res.status(400).send(validation.error); return; }
 
-  let order = {
-    id: orders.length + 1,
-    date: req.body.date,
-    employeeId: req.body.employeeId,
-    customerId: req.body.customerId,
-    orderTotal: req.body.orderTotal,
-    books: [
-      ...req.body.books
-    ]
-  }
-  orders.push(order);
-  res.send(order);
+  let order = new Order({...req.body});
+  let result = await order.save();
+  res.send(result);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
     res.status(400).send(validation.error);
     return;
   }
 
-  let order = orders.find((c) => c.id === parseInt(req.params.id));
+  let order = await Order.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
   if(!order) {
     res.status(400).send('There is no order with a chosen id');
     return;
   }
-
-  order.date = req.body.date;
-  order.employeeId = req.body.employeeId;
-  order.customerId = req.body.customerId;
-  order.orderTotal = req.body.orderTotal;
-  order.books = req.body.books;
   res.send(order);
 });
 
-router.delete('/:id', (req, res) => {
-  let order = orders.find((c) => c.id === parseInt(req.params.id));
+router.delete('/:id', validateId, async (req, res) => {
+  let order = await Order.deleteOne({"_id": req.params.id});
   if(!order) {
     res.status(400).send('There is no order with a chosen id');
     return;
   }
-
-  let index = orders.indexOf(order);
-  orders.splice(index, 1);
   res.send(order);
 });
 

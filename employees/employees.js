@@ -13,12 +13,6 @@ const employeeSchema = new mongoose.Schema({
 });
 const Employee = mongoose.model('Employee', employeeSchema);
 
-const employees = [
-  { id: 1, firstName: 'Igor', lastName: 'Sidnev', storeId: 1, position: 'manager' },
-  { id: 2, firstName: 'Egor', lastName: 'Tupchik', storeId: 2, position: 'manager' },
-  { id: 3, firstName: 'Vgor', lastName: 'Larchik', storeId: 3, position: 'manager' }
-];
-
 const schema = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
