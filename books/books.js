@@ -15,12 +15,6 @@ const Book = mongoose.model('Book', bookSchema); //here we create a class based 
 const Joi = require('joi'); //validation package
 const validateId = require('../middleware/validateId');
 
-const books = [
-  { id: 1, title: 'book1', author: 'auth1', genre: 'Romance', issueDate: '10.10.2020', publisher: 'Alpina' },
-  { id: 2, title: 'book2', author: 'auth2', genre: 'Romance', issueDate: '11.10.2020', publisher: 'Alpina' },
-  { id: 3, title: 'book3', author: 'auth3', genre: 'Romance', issueDate: '12.10.2020', publisher: 'Alpina' },
-];
-
 const schema = Joi.object({
   title: Joi.string().required(),
   author: Joi.string().required().pattern(new RegExp('^[a-zA-Z]{2,}(?: [a-zA-Z]+){0,2}$')),
@@ -45,12 +39,7 @@ router.post('/', async (req, res) => {
   if(validation.error) { res.status(400).send(validation.error); return; }
 
   let book = new Book({
-    id: books.length + 1,
-    title: req.body.title,
-    author: req.body.author,
-    genre: req.body.genre,
-    issueDate: req.body.issueDate,
-    publisher: req.body.publisher
+    ...req.body
   });
   const result = await book.save();
   res.send(result);
@@ -71,14 +60,11 @@ router.put('/:id', validateId, async (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-  let book = books.find((c) => c.id === parseInt(req.params.id));
+  let book = books.deleteOne({"_id": req.params.id});
   if(!book) {
     res.status(400).send('There is no book with a chosen id');
     return;
   }
-
-  let index = books.indexOf(book);
-  books.splice(index, 1);
   res.send(book);
 });
 
