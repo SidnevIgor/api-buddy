@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 
   let customer = new Customer({...req.body});
   let result = await customer.save();
-  res.send(customer);
+  res.send(result);
 });
 
 router.put('/:id', validateId, async (req, res) => {

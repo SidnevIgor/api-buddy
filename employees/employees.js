@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Joi = require('joi'); //validation package
+const validateId = require('../middleware/validateId');
 
 const mongoose = require('mongoose');
 const employeeSchema = new mongoose.Schema({
@@ -10,6 +11,7 @@ const employeeSchema = new mongoose.Schema({
   storeId: Number,
   position: String
 });
+const Employee = mongoose.model('Employee', employeeSchema);
 
 const employees = [
   { id: 1, firstName: 'Igor', lastName: 'Sidnev', storeId: 1, position: 'manager' },
@@ -25,60 +27,46 @@ const schema = Joi.object({
 }); //here we describe the schema of Joi
 
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  let employees = await Employee.find();
   res.send(employees);
 });
-router.get('/:id', (req, res) => {
-  let employee = employees.find((c) => c.id === parseInt(req.params.id));
+router.get('/:id', validateId, async (req, res) => {
+  let employee = await Employee.findById(req.params.id);
   if(!employee) res.status(404).send('There is no employee with such id');
   res.send(employee);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { res.status(400).send(validation.error); return; }
 
-  let employee = {
-    id: employees.length + 1,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    storeId: req.body.storeId,
-    position: req.body.position
-  }
-  employees.push(employee);
-  res.send(employee);
+  let employee = new Employee({ ...req.body });
+  let result = await employee.save();
+  res.send(result);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
     res.status(400).send(validation.error);
     return;
   }
 
-  let employee = employees.find((c) => c.id === parseInt(req.params.id));
+  let employee = await Employee.findOneAndUpdate({ "_id": req.params.id }, {...req.body});
   if(!employee) {
     res.status(400).send('There is no employee with a chosen id');
     return;
   }
-
-  employee.firstName = req.body.firstName;
-  employee.lastName = req.body.lastName;
-  employee.storeId = req.body.storeId;
-  employee.position = req.body.position;
-
   res.send(employee);
 });
 
-router.delete('/:id', (req, res) => {
-  let employee = employees.find((c) => c.id === parseInt(req.params.id));
+router.delete('/:id', validateId, async (req, res) => {
+  let employee = await Employee.deleteOne({"_id": req.params.id});
   if(!employee) {
     res.status(400).send('There is no employee with a chosen id');
     return;
   }
-
-  let index = employees.indexOf(employee);
-  employees.splice(index, 1);
   res.send(employee);
 });
 
