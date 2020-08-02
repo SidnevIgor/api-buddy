@@ -23,7 +23,7 @@ const schema = Joi.object({
 
 
 router.get('/', async (req, res) => {
-  let stores = await Store.find()
+  let stores = await Store.find({city: [req.query.city], street: [req.query.street], building: [req.query.building]})
   .sort({ [req.query.sortBy]: 1 });
   res.send(stores);
 });
