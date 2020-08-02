@@ -13,12 +13,6 @@ const storeSchema = new mongoose.Schema({
 });
 const Store = mongoose.model('Store', storeSchema);
 
-const stores = [
-  { id: 1, city: 'name1', street: 'lname1', building: 'test@gmail.com', postcode: '123-456-789', employees: [] },
-  { id: 2, city: 'name2', street: 'lname2', building: 'test@gmail.com', postcode: '123-456-789', employees: [] },
-  { id: 3, city: 'name3', street: 'lname3', building: 'test@gmail.com', postcode: '123-456-789', employees: [] }
-];
-
 const schema = Joi.object({
   city: Joi.string().required(),
   street: Joi.string().required(),
@@ -29,7 +23,8 @@ const schema = Joi.object({
 
 
 router.get('/', async (req, res) => {
-  let stores = await Store.find();
+  let stores = await Store.find()
+  .sort({ [req.query.sortBy]: 1 });
   res.send(stores);
 });
 router.get('/:id', validateId, async (req, res) => {

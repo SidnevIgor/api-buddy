@@ -22,7 +22,8 @@ const schema = Joi.object({
 
 
 router.get('/', async (req, res) => {
-  let employees = await Employee.find();
+  let employees = await Employee.find()
+  .sort({ [req.query.sortBy]: 1 });
   res.send(employees);
 });
 router.get('/:id', validateId, async (req, res) => {
