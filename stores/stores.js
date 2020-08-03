@@ -9,7 +9,8 @@ const storeSchema = new mongoose.Schema({
   city: String,
   street: String,
   building: String,
-  postcode: String
+  postcode: String,
+  employees: Array
 });
 const Store = mongoose.model('Store', storeSchema);
 
@@ -23,9 +24,17 @@ const schema = Joi.object({
 
 
 router.get('/', async (req, res) => {
-  let stores = await Store.find()
-  .sort({ [req.query.sortBy]: 1 });
-  res.send(stores);
+  let selector = req.query.city?'city':req.query.street?'street':req.query.building?'building':req.query.postcode?'postcode':req.query.employees?'employees':null;
+  let findVal = req.query.city?req.query.city:req.query.street?req.query.street:req.query.building?req.query.building:req.query.postcode?req.query.postcode:req.query.employees?req.query.employees:null;
+  let stores = [];
+  if(selector) {
+    stores = await Store.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
+    res.send(stores);
+  }
+  else {
+    stores = await Store.find().sort({ [req.query.sortBy]: 1 });
+    res.send(stores);
+  }
 });
 router.get('/:id', validateId, async (req, res) => {
   let store = await Store.findById(req.params.id);

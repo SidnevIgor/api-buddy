@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
     res.send(orders);
   }
   else {
-    let orders = await Order.find().sort({ [req.query.sortBy]: 1 });
+    orders = await Order.find().sort({ [req.query.sortBy]: 1 });
     res.send(orders);
   }
 });
