@@ -27,9 +27,18 @@ const schema = Joi.object({
 
 
 router.get('/', async (req, res) => {
-  let books = await Book.find({$or: [{ title: req.query.title }, { title: {$ne: null } }]});
+  let selector = req.query.title?'title':req.query.author?'author':req.query.genre?'genre':req.query.price?'price':req.query.issueDate?'issueDate':req.query.publisher?'publisher':null;
+  let findVal = req.query.title?req.query.title:req.query.author?req.query.author:req.query.genre?req.query.genre:req.query.price?req.query.price:req.query.issueDate?req.query.issueDate:req.query.publisher?req.query.publisher:null;
+  let books = [];
+  if(selector) {
+    books = await Book.find({ [selector]: [findVal] });
+    res.send(books);
+  }
+  else {
+    books = await Book.find();
+    res.send(books);
+  }
 //  .sort({ [req.query.sortBy]: 1 });
-  res.send(books);
 });
 router.get('/:id', validateId, async (req, res) => {
   let book = await Book.findById(req.params.id);
