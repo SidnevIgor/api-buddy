@@ -36,7 +36,6 @@ router.get('/', async (req, res) => {
   }
   else {
     books = await Book.find().sort({ [req.query.sortBy]: 1 });
-    if(books.length === 0) res.status(404).send('There is no books with such parameters');
   }
   res.send(books);
 });

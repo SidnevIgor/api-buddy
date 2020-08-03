@@ -27,12 +27,12 @@ router.get('/', async (req, res) => {
   let employees = [];
   if(selector) {
     employees = await Employee.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    res.send(employees);
+    if(employees.length === 0) res.status(404).send('There is no employees with such parameters');
   }
   else {
     employees = await Employee.find().sort({ [req.query.sortBy]: 1 });
-    res.send(employees);
   }
+  res.send(employees);
 });
 router.get('/:id', validateId, async (req, res) => {
   let employee = await Employee.findById(req.params.id);

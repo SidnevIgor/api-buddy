@@ -29,12 +29,12 @@ router.get('/', async (req, res) => {
   let stores = [];
   if(selector) {
     stores = await Store.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    res.send(stores);
+    if(stores.length === 0) res.status(404).send('There is no stores with such parameters');
   }
   else {
     stores = await Store.find().sort({ [req.query.sortBy]: 1 });
-    res.send(stores);
   }
+  res.send(stores);
 });
 router.get('/:id', validateId, async (req, res) => {
   let store = await Store.findById(req.params.id);
