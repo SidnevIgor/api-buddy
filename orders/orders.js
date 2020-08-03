@@ -23,9 +23,18 @@ const schema = Joi.object({
 
 
 router.get('/', async (req, res) => {
-  let orders = await Order.find()
-  .sort({ [req.query.sortBy]: 1 });
-  res.send(orders);
+  let selector = req.query.date?'date':req.query.employeeId?'employeeId':req.query.customerId?'customerId':req.query.orderTotal?'orderTotal':req.query.books?'books':null;
+  let findVal = req.query.date?req.query.date:req.query.employeeId?req.query.employeeId:req.query.customerId?req.query.customerId:req.query.orderTotal?req.query.orderTotal:req.query.books?req.query.books:null;
+  let orders = [];
+
+  if(selector) {
+    orders = await Order.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
+    res.send(orders);
+  }
+  else {
+    let orders = await Order.find().sort({ [req.query.sortBy]: 1 });
+    res.send(orders);
+  }
 });
 router.get('/:id', validateId, async (req, res) => {
   let order = await Order.findById(req.params.id);
