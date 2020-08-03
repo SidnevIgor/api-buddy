@@ -32,12 +32,13 @@ router.get('/', async (req, res) => {
   let books = [];
   if(selector) {
     books = await Book.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    res.send(books);
+    if(books.length === 0) res.status(404).send('There is no books with such parameters');
   }
   else {
     books = await Book.find().sort({ [req.query.sortBy]: 1 });
-    res.send(books);
+    if(books.length === 0) res.status(404).send('There is no books with such parameters');
   }
+  res.send(books);
 });
 router.get('/:id', validateId, async (req, res) => {
   let book = await Book.findById(req.params.id);
