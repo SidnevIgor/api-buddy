@@ -48,8 +48,14 @@ router.post('/', async (req, res) => {
   if(validation.error) { res.status(400).send(validation.error); return; }
 
   let employee = new Employee({ ...req.body });
-  let result = await employee.save();
-  res.send(result);
+
+  try { //additional error validation
+    let result = await employee.save();
+    res.send(result);
+  }
+  catch(e) {
+    res.status(400).send(e.message);
+  }
 });
 
 router.put('/:id', validateId, async (req, res) => {
