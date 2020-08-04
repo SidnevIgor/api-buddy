@@ -7,16 +7,26 @@ const validateId = require('../middleware/validateId');
 const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   date: String,
-  employeeId: Number,
-  customerId: Number,
-  orderTotal: Number
+  employeeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Employee'
+  },
+  customerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Customer'
+  },
+  orderTotal: Number,
+  books: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Book'
+  }]
 });
 const Order = mongoose.model('Order', orderSchema);
 
 const schema = Joi.object({
   date: Joi.date().required(),
-  employeeId: Joi.number().required(),
-  customerId: Joi.number().required(),
+  employeeId: Joi.string().required(),
+  customerId: Joi.string().required(),
   orderTotal: Joi.number().required(),
   books: Joi.array().items()
 }); //here we describe the schema of Joi
@@ -45,10 +55,15 @@ router.get('/:id', validateId, async (req, res) => {
 router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { res.status(400).send(validation.error); return; }
-
   let order = new Order({...req.body});
-  let result = await order.save();
-  res.send(result);
+  try {
+    let result = await order.save();
+    res.send(result);
+  }
+  catch(e) {
+    res.status(400).send(e.message);
+  }
+
 });
 
 router.put('/:id', validateId, async (req, res) => {
@@ -57,13 +72,17 @@ router.put('/:id', validateId, async (req, res) => {
     res.status(400).send(validation.error);
     return;
   }
-
-  let order = await Order.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
-  if(!order) {
-    res.status(400).send('There is no order with a chosen id');
-    return;
+  try {
+    let order = await Order.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
+    if(!order) {
+      res.status(400).send('There is no order with a chosen id');
+      return;
+    }
+    res.send(order);
   }
-  res.send(order);
+  catch(e) {
+    res.status(400).send(e.message);
+  }
 });
 
 router.delete('/:id', validateId, async (req, res) => {

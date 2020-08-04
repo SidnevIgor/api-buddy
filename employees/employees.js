@@ -64,13 +64,17 @@ router.put('/:id', validateId, async (req, res) => {
     res.status(400).send(validation.error);
     return;
   }
-
-  let employee = await Employee.findOneAndUpdate({ "_id": req.params.id }, {...req.body});
-  if(!employee) {
-    res.status(400).send('There is no employee with a chosen id');
-    return;
+  try {
+    let employee = await Employee.findOneAndUpdate({ "_id": req.params.id }, {...req.body});
+    if(!employee) {
+      res.status(400).send('There is no employee with a chosen id');
+      return;
+    }
+    res.send(employee);
   }
-  res.send(employee);
+  catch (e) {
+    res.status(400).send(e.message);
+  }
 });
 
 router.delete('/:id', validateId, async (req, res) => {
