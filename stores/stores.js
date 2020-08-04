@@ -10,7 +10,10 @@ const storeSchema = new mongoose.Schema({
   street: String,
   building: String,
   postcode: String,
-  employees: Array
+  employees: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Employee'
+  }]
 });
 const Store = mongoose.model('Store', storeSchema);
 
@@ -19,7 +22,7 @@ const schema = Joi.object({
   street: Joi.string().required(),
   building: Joi.string(),
   postcode: Joi.string().required(),
-  employees: Joi.array().items(Joi.number())
+  employees: Joi.array().items(Joi.string())
 }); //here we describe the schema of Joi
 
 
@@ -47,8 +50,14 @@ router.post('/', async (req, res) => {
   if(validation.error) { res.status(400).send(validation.error); return; }
 
   let store = new Store({...req.body});
-  let result = await store.save();
-  res.send(result);
+
+  try {
+    let result = await store.save();
+    res.send(result);
+  }
+  catch(e) {
+    res.status(400).send(e.message);
+  }
 });
 
 router.put('/:id', validateId, async (req, res) => {
@@ -58,12 +67,17 @@ router.put('/:id', validateId, async (req, res) => {
     return;
   }
 
-  let store = await Store.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
-  if(!store) {
-    res.status(400).send('There is no store with a chosen id');
-    return;
+  try {
+    let store = await Store.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
+    if(!store) {
+      res.status(400).send('There is no store with a chosen id');
+      return;
+    }
+    res.send(store);
   }
-  res.send(store);
+  catch(e) {
+    res.status(400).send(e.message);
+  }
 });
 
 router.delete('/:id', validateId, async (req, res) => {
