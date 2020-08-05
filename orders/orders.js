@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
     if(orders.length === 0) res.status(404).send('There is no orders with such parameters');
   }
   else {
-    orders = await Order.find().sort({ [req.query.sortBy]: 1 });
+    orders = await Order.find().populate('employeeId').sort({ [req.query.sortBy]: 1 });
   }
   res.send(orders);
 });
