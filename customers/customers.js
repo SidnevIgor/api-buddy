@@ -9,7 +9,8 @@ const customerSchema = new mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
-  tel: String
+  tel: String,
+  password: String
 });
 const Customer = mongoose.model('Customer', customerSchema);
 
@@ -17,7 +18,8 @@ const schema = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
   email: Joi.string(),
-  tel: Joi.string().required()
+  tel: Joi.string().required(),
+  password: Joi.string().required()
 }); //here we describe the schema of Joi
 
 
