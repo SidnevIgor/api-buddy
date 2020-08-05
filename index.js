@@ -10,6 +10,7 @@ const customers = require('./customers/customers');
 const stores = require('./stores/stores');
 const orders = require('./orders/orders');
 const employees = require('./employees/employees');
+const auth = require('./auth/auth');
 
 app.use(express.json()); //enabling JSON parsing
 app.use(helmet());
@@ -18,6 +19,7 @@ app.use('/api/customers', customers);
 app.use('/api/stores', stores);
 app.use('/api/orders', orders);
 app.use('/api/employees', employees);
+app.use('/api/auth', auth);
 app.use('/', home);
 
 const port = process.env.PORT || 3000; //getting local variables
