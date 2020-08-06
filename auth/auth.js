@@ -15,7 +15,12 @@ router.post('/', async (req, res) => {
   else {
     let customer = new Customer({...req.body});
     let result = await customer.save();
-    res.send(result);
+    res.send({
+      firstName: result.firstName,
+      lastName: result.lastName,
+      email: result.email,
+      tel: result.tel
+    });
   }
 });
 
