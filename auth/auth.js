@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const bcrypt = require('bcrypt'); //this is required for hashing
+const bcrypt = require('bcrypt'); //this is required for hashing passwords
+const jwt = require('jsonwebtoken');
 
 const mongoose = require('mongoose');
 const {Customer, schema} = require('../customers/customers');
@@ -11,8 +12,9 @@ router.post('/', async (req, res) => {
   if(validation.error) { res.status(400).send(validation.error); return; }
 
   let customer = await Customer.findOne({ 'email': req.body.email }); //check if user exists already
-  if(customer) {
-    res.status(400).send('User with such email already exists');
+  if(customer) { //the customer is in DB and
+    let token = jwt.sign({_id: res._id}, 'secret');
+    res.send(token);
   }
   else {
     let customer = new Customer({...req.body});
