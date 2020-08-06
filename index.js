@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const home = require('./home/home');
 const books = require('./books/books');
-const customers = require('./customers/customers');
+const customers = require('./customers/customers').router;
 const stores = require('./stores/stores');
 const orders = require('./orders/orders');
 const employees = require('./employees/employees');

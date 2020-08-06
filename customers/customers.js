@@ -75,4 +75,6 @@ router.delete('/:id', validateId, async (req, res) => {
   res.send(customer);
 });
 
-module.exports = router;
+module.exports.router = router;
+module.exports.Customer = Customer;
+module.exports.schema = schema;
