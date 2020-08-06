@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const bcrypt = require('bcrypt'); //this is required for hashing
+
 const mongoose = require('mongoose');
 const {Customer, schema} = require('../customers/customers');
 
@@ -14,6 +16,8 @@ router.post('/', async (req, res) => {
   }
   else {
     let customer = new Customer({...req.body});
+    let salt = await bcrypt.genSalt(10); //generate salt (addition to the password)
+    customer.password = await bcrypt.hash(customer.password, salt); //generating hash
     let result = await customer.save();
     res.send({
       firstName: result.firstName,
