@@ -43,12 +43,7 @@ router.get('/:id', validateId, async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const validation = schema.validate(req.body); //here we validate the schema and req.body
-  if(validation.error) { res.status(400).send(validation.error); return; }
-
-  let customer = new Customer({...req.body});
-  let result = await customer.save();
-  res.send(result);
+  res.status(400).send("This route does not exists. To POST a new user please use '/auth' route");
 });
 
 router.put('/:id', validateId, async (req, res) => {
