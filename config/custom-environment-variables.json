@@ -1,4 +1,4 @@
 {
   "name": "API-buddy app - Development",
-  "password": "app_password"
+  "secret": "api-buddy-secret"
 }

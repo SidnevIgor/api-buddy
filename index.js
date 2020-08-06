@@ -12,6 +12,11 @@ const orders = require('./orders/orders');
 const employees = require('./employees/employees');
 const auth = require('./auth/auth');
 
+if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
+  console.log('Secret is not defined!!!');
+  process.exit(1);
+}
+
 app.use(express.json()); //enabling JSON parsing
 app.use(helmet());
 app.use('/api/books', books);

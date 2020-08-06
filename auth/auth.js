@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const bcrypt = require('bcrypt'); //this is required for hashing passwords
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); //this is used to generate token
+
+const config = require('config'); //this is used to store hidden server variables
 
 const mongoose = require('mongoose');
 const {Customer, schema} = require('../customers/customers');
@@ -13,7 +15,7 @@ router.post('/', async (req, res) => {
 
   let customer = await Customer.findOne({ 'email': req.body.email }); //check if user exists already
   if(customer) { //the customer is in DB and
-    let token = jwt.sign({_id: res._id}, 'secret');
+    let token = jwt.sign({_id: res._id}, config.get('secret'));
     res.send(token);
   }
   else {
