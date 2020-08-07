@@ -14,27 +14,20 @@ router.post('/', async (req, res) => {
   if(validation.error) { res.status(400).send(validation.error); return; }
 
   let customer = await Customer.findOne({ 'email': req.body.email }); //check if user exists already
-  if(customer) { //the customer is in DB and
-    let token = jwt.sign({_id: res._id}, config.get('secret'));
-    res.header('x-auth-token', token).send({
-      firstName: customer.firstName,
-      lastName: customer.lastName,
-      email: customer.email,
-      tel: customer.tel
-    });
-  }
-  else {
-    let customer = new Customer({...req.body});
+  let token = jwt.sign({_id: res._id}, config.get('secret'));
+
+  if(!customer) {
+    customer = new Customer({...req.body});
     let salt = await bcrypt.genSalt(10); //generate salt (addition to the password)
     customer.password = await bcrypt.hash(customer.password, salt); //generating hash
     let result = await customer.save();
-    res.send({
-      firstName: result.firstName,
-      lastName: result.lastName,
-      email: result.email,
-      tel: result.tel
-    });
   }
+  res.header('x-auth-token', token).send({
+    firstName: customer.firstName,
+    lastName: customer.lastName,
+    email: customer.email,
+    tel: customer.tel
+  });
 });
 
 
