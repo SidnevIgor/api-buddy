@@ -7,6 +7,7 @@ module.exports = function auth(req, res, next) {
   else {
     try {
       let decoded = jwt.verify(token, config.get('secret')); //we try to decode the token using private key
+      console.log(decoded);
       req.user = decoded; //we store a user ID in req now and can access it leter on
       next();
     }
