@@ -16,7 +16,12 @@ router.post('/', async (req, res) => {
   let customer = await Customer.findOne({ 'email': req.body.email }); //check if user exists already
   if(customer) { //the customer is in DB and
     let token = jwt.sign({_id: res._id}, config.get('secret'));
-    res.send(token);
+    res.header('x-auth-token', token).send({
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      tel: customer.tel
+    });
   }
   else {
     let customer = new Customer({...req.body});
