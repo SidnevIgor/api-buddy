@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const auth = require('../middleware/auth');
+
 const mongoose = require('mongoose');
 const bookSchema = new mongoose.Schema({ //here we create a mongoose schema
   title: String,
@@ -45,7 +47,7 @@ router.get('/:id', validateId, async (req, res) => {
   res.send(book);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { res.status(400).send(validation.error); return; }
 
