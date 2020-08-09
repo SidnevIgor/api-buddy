@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const config = require('config'); //allows to use local variables
 const helmet = require('helmet'); //protecting routes
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); //this allows to talk with MongoDB
+const timeout = require('connect-timeout'); //this allows to stop trying to connect after a certain time
 
 const home = require('./home/home');
 const books = require('./books/books');
@@ -19,6 +20,7 @@ if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
 }
 
 app.use(express.json()); //enabling JSON parsing
+app.use(timeout('7s'));
 app.use(helmet());
 app.use('/api/books', books);
 app.use('/api/customers', customers);
