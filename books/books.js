@@ -27,24 +27,18 @@ const schema = Joi.object({
 
 const { handleError, ErrorHandler }  = require('../middleware/error');
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   let selector = req.query.title?'title':req.query.author?'author':req.query.genre?'genre':req.query.price?'price':req.query.issueDate?'issueDate':req.query.publisher?'publisher':null;
   let findVal = req.query.title?req.query.title:req.query.author?req.query.author:req.query.genre?req.query.genre:req.query.price?req.query.price:req.query.issueDate?req.query.issueDate:req.query.publisher?req.query.publisher:null;
   let books = [];
-  try {
-    if(selector) {
-      books = await Book.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-      if(books.length === 0) res.status(404).send('There is no books with such parameters');
-    }
-    else {
-      books = await Book.find().sort({ [req.query.sortBy]: 1 });
-    }
-    res.send(books);
-    next();
+  if(selector) {
+    books = await Book.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
+    if(books.length === 0) res.status(404).send('There is no books with such parameters');
   }
-  catch(ex) {
-    next(ex);
+  else {
+    books = await Book.find().sort({ [req.query.sortBy]: 1 });
   }
+  res.send(books);
 });
 router.get('/:id', validateId, async (req, res) => {
   let book = await Book.findById(req.params.id);
