@@ -26,7 +26,7 @@ const schema = Joi.object({
 }); //here we describe the schema of Joi
 
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   let selector = req.query.title?'title':req.query.author?'author':req.query.genre?'genre':req.query.price?'price':req.query.issueDate?'issueDate':req.query.publisher?'publisher':null;
   let findVal = req.query.title?req.query.title:req.query.author?req.query.author:req.query.genre?req.query.genre:req.query.price?req.query.price:req.query.issueDate?req.query.issueDate:req.query.publisher?req.query.publisher:null;
   let books = [];
@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
     res.send(books);
   }
   catch(ex) {
-    res.status(500).send('The server is unavailable'); return;
+    next(ex);
   }
 });
 router.get('/:id', validateId, async (req, res) => {

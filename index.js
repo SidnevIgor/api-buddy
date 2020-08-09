@@ -11,6 +11,7 @@ const stores = require('./stores/stores');
 const orders = require('./orders/orders');
 const employees = require('./employees/employees');
 const auth = require('./auth/auth');
+const error = require('./middleware/error');
 
 if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
   console.log('Secret is not defined!!!');
@@ -26,6 +27,7 @@ app.use('/api/orders', orders);
 app.use('/api/employees', employees);
 app.use('/api/auth', auth);
 app.use('/', home);
+app.use(error);
 
 const port = process.env.PORT || 3000; //getting local variables
 app.listen(port);
