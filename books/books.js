@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
     res.send(books);
   }
   catch(ex) {
-      res.status(500).send('The server is unavailable');
+    res.status(500).send('The server is unavailable'); return;
   }
 });
 router.get('/:id', validateId, async (req, res) => {
