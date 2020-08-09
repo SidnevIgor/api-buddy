@@ -25,6 +25,7 @@ const schema = Joi.object({
   publisher: Joi.string().required()
 }); //here we describe the schema of Joi
 
+const { handleError, ErrorHandler }  = require('../middleware/error');
 
 router.get('/', async (req, res, next) => {
   let selector = req.query.title?'title':req.query.author?'author':req.query.genre?'genre':req.query.price?'price':req.query.issueDate?'issueDate':req.query.publisher?'publisher':null;
@@ -39,6 +40,7 @@ router.get('/', async (req, res, next) => {
       books = await Book.find().sort({ [req.query.sortBy]: 1 });
     }
     res.send(books);
+    next();
   }
   catch(ex) {
     next(ex);

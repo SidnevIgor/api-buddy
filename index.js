@@ -11,8 +11,8 @@ const stores = require('./stores/stores');
 const orders = require('./orders/orders');
 const employees = require('./employees/employees');
 const auth = require('./auth/auth');
-const error = require('./middleware/error');
 
+const error = require('./middleware/error');
 if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
   console.log('Secret is not defined!!!');
   process.exit(1);
