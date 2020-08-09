@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const app = express();
 const config = require('config'); //allows to use local variables
 const helmet = require('helmet'); //protecting routes
