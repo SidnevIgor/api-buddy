@@ -4,6 +4,8 @@ const app = express();
 const config = require('config'); //allows to use local variables
 const helmet = require('helmet'); //protecting routes
 const mongoose = require('mongoose'); //this allows to talk with MongoDB
+
+//routes for checking timeout error
 const timeout = require('connect-timeout'); //this allows to stop trying to connect after a certain time
 
 const home = require('./home/home');
@@ -21,7 +23,7 @@ if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
 }
 
 app.use(express.json()); //enabling JSON parsing
-app.use(timeout('7s'));
+app.use(timeout('7s')); //we give 7 sec until timeout error
 app.use(helmet());
 app.use('/api/books', books);
 app.use('/api/customers', customers);
@@ -42,4 +44,4 @@ mongoose.connect('mongodb://localhost/playground').then(() => {
 })
 .catch((err) => {
   console.log(`Error happened during the conenction to MongoDB: ${err}`);
-})
+});
