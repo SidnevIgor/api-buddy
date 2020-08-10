@@ -29,7 +29,13 @@ winston.configure({
 
 process.on('uncaughtException', (ex) => {
   winston.error(ex.message, ex);
-}); //checking for errors outside of routes
+  process.exit(1);
+}); //checking for errors outside of routes (sync erros)
+process.on('unhandledRejection', (ex) => {
+  winston.error(ex.message, ex);
+  process.exit(1);
+}); //checking for errors outside of routes (sync erros)
+
 
 app.use(express.json()); //enabling JSON parsing
 app.use(timeout('7s')); //we give 7 sec until timeout error
