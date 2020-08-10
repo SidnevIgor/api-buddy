@@ -4,9 +4,8 @@ const app = express();
 const config = require('config'); //allows to use local variables
 const helmet = require('helmet'); //protecting routes
 const mongoose = require('mongoose'); //this allows to talk with MongoDB
-
-//routes for checking timeout error
 const timeout = require('connect-timeout'); //this allows to stop trying to connect after a certain time
+var winston = require('winston');
 
 const home = require('./home/home');
 const books = require('./books/books');
@@ -15,12 +14,18 @@ const stores = require('./stores/stores');
 const orders = require('./orders/orders');
 const employees = require('./employees/employees');
 const auth = require('./auth/auth');
-
 const error = require('./middleware/error');
+
 if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
   console.log('Secret is not defined!!!');
   process.exit(1);
 }
+
+winston.configure({
+    transports: [
+      new (winston.transports.File)({ filename: 'errors.log' })
+    ]
+}); //here we set where the error logs should be saved
 
 app.use(express.json()); //enabling JSON parsing
 app.use(timeout('7s')); //we give 7 sec until timeout error
