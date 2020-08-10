@@ -23,7 +23,7 @@ if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
 
 winston.configure({
     transports: [
-      new (winston.transports.File)({ filename: 'errors.log' })
+      new (winston.transports.File)({ filename: 'errors.log', level: 'error' })
     ]
 }); //here we set where the error logs should be saved
 
