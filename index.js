@@ -27,6 +27,10 @@ winston.configure({
     ]
 }); //here we set where the error logs should be saved
 
+process.on('uncaughtException', (ex) => {
+  winston.error(ex.message, ex);
+}); //checking for errors outside of routes
+
 app.use(express.json()); //enabling JSON parsing
 app.use(timeout('7s')); //we give 7 sec until timeout error
 app.use(helmet());
