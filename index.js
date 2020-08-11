@@ -13,6 +13,7 @@ const authBooks = require('./books/auth-books');
 const customers = require('./customers/customers').router;
 const authCustomers = require('./customers/auth-customers').router;
 const stores = require('./stores/stores');
+const authStores = require('./stores/auth-stores');
 const orders = require('./orders/orders');
 const authOrders = require('./orders/auth-orders');
 const employees = require('./employees/employees');
@@ -39,6 +40,7 @@ process.on('uncaughtException', (ex) => {
 app.use(express.json()); //enabling JSON parsing
 app.use(timeout('7s')); //we give 7 sec until timeout error
 app.use(helmet());
+
 app.use('/api/books', books);
 app.use('/api/customers', customers);
 app.use('/api/stores', stores);
@@ -50,6 +52,8 @@ app.use('/api/auth/books', authBooks);
 app.use('/api/auth/customers', authCustomers);
 app.use('/api/auth/employees', authEmployees);
 app.use('/api/auth/orders', authOrders);
+app.use('/api/auth/stores', authStores);
+
 app.use('/', home);
 app.use(error);
 
