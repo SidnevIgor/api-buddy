@@ -11,6 +11,7 @@ const home = require('./home/home');
 const books = require('./books/books');
 const authBooks = require('./books/auth-books');
 const customers = require('./customers/customers').router;
+const authCustomers = require('./customers/auth-customers').router;
 const stores = require('./stores/stores');
 const orders = require('./orders/orders');
 const employees = require('./employees/employees');
@@ -44,6 +45,7 @@ app.use('/api/employees', employees);
 app.use('/api/auth', auth);
 
 app.use('/api/auth/books', authBooks);
+app.use('/api/auth/customers', authCustomers);
 app.use('/', home);
 app.use(error);
 
