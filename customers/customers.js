@@ -1,26 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
-const Joi = require('joi'); //validation package
 const validateId = require('../middleware/validateId');
 
-const mongoose = require('mongoose');
-const customerSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
-  email: String,
-  tel: String,
-  password: String
-});
-const Customer = mongoose.model('Customer', customerSchema);
-
-const schema = Joi.object({
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  email: Joi.string(),
-  tel: Joi.string().required(),
-  password: Joi.string().required()
-}); //here we describe the schema of Joi
+const { Customer, schema } = require('./customerSchema');
 
 
 router.get('/', async (req, res) => {
