@@ -46,13 +46,13 @@ app.use('/api/customers', customers);
 app.use('/api/stores', stores);
 app.use('/api/orders', orders);
 app.use('/api/employees', employees);
-app.use('/api/auth', auth);
 
 app.use('/api/auth/books', authBooks);
 app.use('/api/auth/customers', authCustomers);
 app.use('/api/auth/employees', authEmployees);
 app.use('/api/auth/orders', authOrders);
 app.use('/api/auth/stores', authStores);
+app.use('/api/auth', auth);
 
 app.use('/', home);
 app.use(error);
