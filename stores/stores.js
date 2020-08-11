@@ -1,30 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
-const Joi = require('joi'); //validation package
 const validateId = require('../middleware/validateId');
-
-const mongoose = require('mongoose');
-const storeSchema = new mongoose.Schema({
-  city: String,
-  street: String,
-  building: String,
-  postcode: String,
-  employees: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Employee'
-  }]
-});
-const Store = mongoose.model('Store', storeSchema);
-
-const schema = Joi.object({
-  city: Joi.string().required(),
-  street: Joi.string().required(),
-  building: Joi.string(),
-  postcode: Joi.string().required(),
-  employees: Joi.array().items(Joi.string())
-}); //here we describe the schema of Joi
-
+const { Store, schema } = require('./storeSchema');
 
 router.get('/', async (req, res) => {
   let selector = req.query.city?'city':req.query.street?'street':req.query.building?'building':req.query.postcode?'postcode':req.query.employees?'employees':null;
