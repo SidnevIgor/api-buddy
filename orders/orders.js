@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const validateId = require('../middleware/validateId');
-const { Order, schema } = require('./orderSchema');
+const { Order, schema } = require('./orderSchema'); 
 
 router.get('/', async (req, res) => {
   let selector = req.query.date?'date':req.query.employeeId?'employeeId':req.query.customerId?'customerId':req.query.orderTotal?'orderTotal':req.query.books?'books':null;
