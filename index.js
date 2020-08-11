@@ -9,6 +9,7 @@ var winston = require('winston');
 
 const home = require('./home/home');
 const books = require('./books/books');
+const authBooks = require('./books/auth-books');
 const customers = require('./customers/customers').router;
 const stores = require('./stores/stores');
 const orders = require('./orders/orders');
@@ -41,6 +42,8 @@ app.use('/api/stores', stores);
 app.use('/api/orders', orders);
 app.use('/api/employees', employees);
 app.use('/api/auth', auth);
+
+app.use('/api/auth/books', authBooks);
 app.use('/', home);
 app.use(error);
 
