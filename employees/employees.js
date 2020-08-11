@@ -1,28 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
-const Joi = require('joi'); //validation package
 const validateId = require('../middleware/validateId');
-
-const mongoose = require('mongoose');
-const employeeSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
-  storeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Store'
-  },
-  position: String
-});
-const Employee = mongoose.model('Employee', employeeSchema);
-
-const schema = Joi.object({
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  storeId: Joi.string().required(),
-  position: Joi.string().required()
-}); //here we describe the schema of Joi
-
+const { Employee, schema } = require('./employerSchema');
 
 router.get('/', async (req, res) => {
   let selector = req.query.firstName?'firstName':req.query.lastName?'lastName':req.query.storeId?'storeId':req.query.position?'position':null;
