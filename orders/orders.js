@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const validateId = require('../middleware/validateId');
-const { Order, schema } = require('./orderSchema'); 
+const { Order, schema } = require('./orderSchema');
 
 router.get('/', async (req, res) => {
   let selector = req.query.date?'date':req.query.employeeId?'employeeId':req.query.customerId?'customerId':req.query.orderTotal?'orderTotal':req.query.books?'books':null;
@@ -10,59 +10,55 @@ router.get('/', async (req, res) => {
 
   if(selector) {
     orders = await Order.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    if(orders.length === 0) res.status(404).send('There is no orders with such parameters');
+    if(orders.length === 0) return res.status(404).send('There is no orders with such parameters');
   }
   else {
     orders = await Order.find().sort({ [req.query.sortBy]: 1 });
   }
-  res.send(orders);
+  return res.send(orders);
 });
 router.get('/:id', validateId, async (req, res) => {
   let order = await Order.findById(req.params.id);
-  if(!order) res.status(404).send('There is no order with such id');
-  res.send(order);
+  if(!order) return res.status(404).send('There is no order with such id');
+  return res.send(order);
 });
 
 router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
-  if(validation.error) { res.status(400).send(validation.error); return; }
+  if(validation.error) { return res.status(400).send(validation.error); }
   let order = new Order({...req.body});
   try {
     let result = await order.save();
-    res.send(result);
+    return res.send(result);
   }
   catch(e) {
-    res.status(400).send(e.message);
+    return res.status(400).send(e.message);
   }
-
 });
 
 router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
-    res.status(400).send(validation.error);
-    return;
+    return res.status(400).send(validation.error);
   }
   try {
     let order = await Order.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
     if(!order) {
-      res.status(400).send('There is no order with a chosen id');
-      return;
+      return res.status(400).send('There is no order with a chosen id');
     }
-    res.send(order);
+    return res.send(order);
   }
   catch(e) {
-    res.status(400).send(e.message);
+    return res.status(400).send(e.message);
   }
 });
 
 router.delete('/:id', validateId, async (req, res) => {
   let order = await Order.deleteOne({"_id": req.params.id});
   if(!order) {
-    res.status(400).send('There is no order with a chosen id');
-    return;
+    return res.status(400).send('There is no order with a chosen id');
   }
-  res.send(order);
+  return res.send(order);
 });
 
 module.exports = router;

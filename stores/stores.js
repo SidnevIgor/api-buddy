@@ -9,61 +9,58 @@ router.get('/', async (req, res) => {
   let stores = [];
   if(selector) {
     stores = await Store.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    if(stores.length === 0) res.status(404).send('There is no stores with such parameters');
+    if(stores.length === 0) return res.status(404).send('There is no stores with such parameters');
   }
   else {
     stores = await Store.find().sort({ [req.query.sortBy]: 1 });
   }
-  res.send(stores);
+  return res.send(stores);
 });
 router.get('/:id', validateId, async (req, res) => {
   let store = await Store.findById(req.params.id);
-  if(!store) res.status(404).send('There is no store with such id');
-  res.send(store);
+  if(!store) return res.status(404).send('There is no store with such id');
+  return res.send(store);
 });
 
 router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
-  if(validation.error) { res.status(400).send(validation.error); return; }
+  if(validation.error) { return res.status(400).send(validation.error); }
 
   let store = new Store({...req.body});
 
   try {
     let result = await store.save();
-    res.send(result);
+    return res.send(result);
   }
   catch(e) {
-    res.status(400).send(e.message);
+    return res.status(400).send(e.message);
   }
 });
 
 router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
-    res.status(400).send(validation.error);
-    return;
+    return res.status(400).send(validation.error);
   }
 
   try {
     let store = await Store.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
     if(!store) {
-      res.status(400).send('There is no store with a chosen id');
-      return;
+      return res.status(400).send('There is no store with a chosen id');
     }
-    res.send(store);
+    return res.send(store);
   }
   catch(e) {
-    res.status(400).send(e.message);
+    return res.status(400).send(e.message);
   }
 });
 
 router.delete('/:id', validateId, async (req, res) => {
   let store = await Store.deleteOne({"_id": req.params.id});
   if(!store) {
-    res.status(400).send('There is no store with a chosen id');
-    return;
+    return res.status(400).send('There is no store with a chosen id');
   }
-  res.send(store);
+  return res.send(store);
 });
 
 module.exports = router;

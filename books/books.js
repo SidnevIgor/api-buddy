@@ -10,49 +10,46 @@ router.get('/', async (req, res) => {
   let books = [];
   if(selector) {
     books = await Book.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    if(books.length === 0) res.status(404).send('There is no books with such parameters');
+    if(books.length === 0) return res.status(404).send('There is no books with such parameters');
   }
   else {
     books = await Book.find().sort({ [req.query.sortBy]: 1 });
   }
-  res.send(books);
+  return res.send(books);
 });
 router.get('/:id', validateId, async (req, res) => {
   let book = await Book.findById(req.params.id);
-  if(!book) res.status(404).send('There is no book with such id');
-  res.send(book);
+  if(!book) return res.status(404).send('There is no book with such id');
+  return res.send(book);
 });
 
 router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
-  if(validation.error) { res.status(400).send(validation.error); return; }
+  if(validation.error) { return res.status(400).send(validation.error); }
 
   let book = new Book({...req.body});
   const result = await book.save();
-  res.send(result);
+  return res.send(result);
 });
 
 router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
     res.status(400).send(validation.error);
-    return;
   }
   let book = await Book.findOneAndUpdate({"_id":req.params.id}, {...req.body});
   if(!book) {
     res.status(400).send('There is no book with a chosen id');
-    return;
   }
-  res.send(book);
+  return res.send(book);
 });
 
 router.delete('/:id', async (req, res) => {
   let book = await Book.deleteOne({"_id": req.params.id});
   if(!book) {
     res.status(400).send('There is no book with a chosen id');
-    return;
   }
-  res.send(book);
+  return res.send(book);
 });
 
 module.exports = router;

@@ -9,60 +9,57 @@ router.get('/', async (req, res) => {
   let employees = [];
   if(selector) {
     employees = await Employee.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    if(employees.length === 0) res.status(404).send('There is no employees with such parameters');
+    if(employees.length === 0) return res.status(404).send('There is no employees with such parameters');
   }
   else {
     employees = await Employee.find().sort({ [req.query.sortBy]: 1 });
   }
-  res.send(employees);
+  return res.send(employees);
 });
 router.get('/:id', validateId, async (req, res) => {
   let employee = await Employee.findById(req.params.id);
-  if(!employee) res.status(404).send('There is no employee with such id');
-  res.send(employee);
+  if(!employee) return res.status(404).send('There is no employee with such id');
+  return res.send(employee);
 });
 
 router.post('/', async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
-  if(validation.error) { res.status(400).send(validation.error); return; }
+  if(validation.error) { return res.status(400).send(validation.error); }
 
   let employee = new Employee({ ...req.body });
 
   try { //additional error validation
     let result = await employee.save();
-    res.send(result);
+    return res.send(result);
   }
   catch(e) {
-    res.status(400).send(e.message);
+    return res.status(400).send(e.message);
   }
 });
 
 router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
-    res.status(400).send(validation.error);
-    return;
+    return res.status(400).send(validation.error);
   }
   try {
     let employee = await Employee.findOneAndUpdate({ "_id": req.params.id }, {...req.body});
     if(!employee) {
-      res.status(400).send('There is no employee with a chosen id');
-      return;
+      return res.status(400).send('There is no employee with a chosen id');
     }
-    res.send(employee);
+    return res.send(employee);
   }
   catch (e) {
-    res.status(400).send(e.message);
+    return res.status(400).send(e.message);
   }
 });
 
 router.delete('/:id', validateId, async (req, res) => {
   let employee = await Employee.deleteOne({"_id": req.params.id});
   if(!employee) {
-    res.status(400).send('There is no employee with a chosen id');
-    return;
+    return res.status(400).send('There is no employee with a chosen id');
   }
-  res.send(employee);
+  return res.send(employee);
 });
 
 module.exports = router;

@@ -11,45 +11,42 @@ router.get('/', async (req, res) => {
   let customers = [];
   if(selector) {
     customers = await Customer.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
-    if(customers.length === 0) res.status(404).send('There is no customers with such parameters');
+    if(customers.length === 0) return res.status(404).send('There is no customers with such parameters');
   }
   else {
     customers = await Customer.find().sort({ [req.query.sortBy]: 1 });
   }
-  res.send(customers);
+  return res.send(customers);
 });
 router.get('/:id', validateId, async (req, res) => {
   let customer = await Customer.findById(req.params.id);
-  if(!customer) res.status(404).send('There is no customer with such id');
-  res.send(customer);
+  if(!customer) return res.status(404).send('There is no customer with such id');
+  return res.send(customer);
 });
 
 router.post('/', async (req, res) => {
-  res.status(400).send("This route does not exists. To POST a new user please use '/auth' route");
+  return res.status(400).send("This route does not exists. To POST a new user please use '/auth' route");
 });
 
 router.put('/:id', validateId, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) {
-    res.status(400).send(validation.error);
-    return;
+    return res.status(400).send(validation.error);
   }
 
   let customer = await Customer.findOneAndUpdate({"_id":req.params.id}, {...req.body});
   if(!customer) {
-    res.status(400).send('There is no customer with a chosen id');
-    return;
+    return res.status(400).send('There is no customer with a chosen id');
   }
-  res.send(customer);
+  return res.send(customer);
 });
 
 router.delete('/:id', validateId, async (req, res) => {
   let customer = await Customer.deleteOne({"_id": req.params.id});
   if(!customer) {
-    res.status(400).send('There is no customer with a chosen id');
-    return;
+    return res.status(400).send('There is no customer with a chosen id');
   }
-  res.send(customer);
+  return res.send(customer);
 });
 
 module.exports.router = router;
