@@ -15,6 +15,7 @@ const authCustomers = require('./customers/auth-customers').router;
 const stores = require('./stores/stores');
 const orders = require('./orders/orders');
 const employees = require('./employees/employees');
+const authEmployees = require('./employees/auth-employees');
 const auth = require('./auth/auth');
 const error = require('./middleware/error');
 
@@ -46,6 +47,7 @@ app.use('/api/auth', auth);
 
 app.use('/api/auth/books', authBooks);
 app.use('/api/auth/customers', authCustomers);
+app.use('/api/auth/employees', authEmployees);
 app.use('/', home);
 app.use(error);
 
