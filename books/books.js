@@ -1,31 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
-const mongoose = require('mongoose');
-const bookSchema = new mongoose.Schema({ //here we create a mongoose schema
-  title: String,
-  author: String,
-  genre: String,
-  price: Number,
-  issueDate: { type: Date, default: Date.now },
-  publisher: String
-});
-
-const Book = mongoose.model('Book', bookSchema); //here we create a class based on mongoose schema
-
-const Joi = require('joi'); //validation package
 const validateId = require('../middleware/validateId');
 
-const schema = Joi.object({
-  title: Joi.string().required(),
-  author: Joi.string().required().pattern(new RegExp('^[a-zA-Z]{2,}(?: [a-zA-Z]+){0,2}$')),
-  genre: Joi.string().required(),
-  price: Joi.number().required(),
-  issueDate: Joi.date().required(),
-  publisher: Joi.string().required()
-}); //here we describe the schema of Joi
-
-const { handleError, ErrorHandler }  = require('../middleware/error');
+const { Book, schema } = require('./bookSchema'); //here we create a class based on mongoose schema
 
 router.get('/', async (req, res) => {
   let selector = req.query.title?'title':req.query.author?'author':req.query.genre?'genre':req.query.price?'price':req.query.issueDate?'issueDate':req.query.publisher?'publisher':null;
