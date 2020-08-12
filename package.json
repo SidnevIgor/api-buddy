@@ -21,5 +21,8 @@
     "nodemon": "^2.0.4",
     "underscore": "^1.10.2",
     "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "jest": "^26.3.0"
   }
 }
