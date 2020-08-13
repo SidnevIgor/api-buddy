@@ -24,6 +24,10 @@ describe('/api/books', function() {
     });
   });
   describe('GET one book', () => {
+    it('should throw an error when id is invalid', async () => {
+      let res = await request(server).get(`/api/books/1234`);
+      expect(res.status).toBe(404);
+    });
     it('should retun one book', async () => {
       let book = new Book({
         title: 't1'
