@@ -62,8 +62,9 @@ app.listen(port);
 console.log(`Listening on port ${port}`);
 console.log(`Environment: ${config.get('name')}`);
 
-mongoose.connect('mongodb://localhost/playground').then(() => {
-  console.log('Successfully connected to the database');
+const db = config.get('db');
+mongoose.connect(db).then(() => {
+  console.log(`Successfully connected to the database - ${db}`);
 })
 .catch((err) => {
   console.log(`Error happened during the conenction to MongoDB: ${err}`);

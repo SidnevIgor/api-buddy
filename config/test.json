@@ -1,3 +1,4 @@
 {
-  "name": "API-buddy app - Test"
+  "name": "API-buddy app - Test",
+  "db": "mongodb://localhost/playground_test"
 }
