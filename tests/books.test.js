@@ -28,6 +28,10 @@ describe('/api/books', function() {
       let res = await request(server).get(`/api/books/1234`);
       expect(res.status).toBe(404);
     });
+    it('should throw an error when id is not found', async () => {
+      let res = await request(server).get(`/api/books/5f355ce806f38631fc33530d`);
+      expect(res.status).toBe(404);
+    });
     it('should retun one book', async () => {
       let book = new Book({
         title: 't1'
