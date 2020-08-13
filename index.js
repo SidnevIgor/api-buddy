@@ -58,7 +58,7 @@ app.use('/', home);
 app.use(error);
 
 const port = process.env.PORT || 3000; //getting local variables
-app.listen(port);
+const server = app.listen(port);
 console.log(`Listening on port ${port}`);
 console.log(`Environment: ${config.get('name')}`);
 
