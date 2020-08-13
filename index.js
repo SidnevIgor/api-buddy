@@ -69,3 +69,6 @@ mongoose.connect(db).then(() => {
 .catch((err) => {
   console.log(`Error happened during the conenction to MongoDB: ${err}`);
 });
+//this is required for testing only
+
+module.exports = server;

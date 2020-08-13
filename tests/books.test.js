@@ -1,8 +1,18 @@
-const books = require('../books/books');
-const authBooks = require('../books/auth-books');
+const request = require('supertest');
+let server;
 
-describe('books', function() {
-  test('should return a true value', () => {
+describe('/api/books', function() {
+  beforeEach(() => {
+    server = require('../index');
+  });
+  afterEach(() => {
+    server.close();
+  });
 
+  describe('GET all books', () => {
+    it('should return all genres', async () => {
+      let res = await request(server).get('/api/books');
+      expect(res.status).toBe(200);
+    });
   });
 });
