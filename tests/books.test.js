@@ -62,11 +62,24 @@ describe('/api/books', function() {
 
   describe('POST one book', () => {
     it('should return validation error', async () => {
-      let res = await request(server).post('/api/books',{
+      let res = await request(server).post('/api/books').send({
         title: 't1',
         price: 100
       });
       expect(res.status).toBe(400);
+    });
+    it('should post a book', async () => {
+      let book = {
+        title: "book9",
+        author: "Leo Tolstoy",
+        genre: "Romance",
+        price: 100,
+        issueDate: "2020",
+        publisher: "Alpina"
+      };
+      let res = await request(server).post('/api/books').send({...book});
+      console.log(res.body);
+      expect(res.body.title).toMatch(book.title);
     });
   });
 });
