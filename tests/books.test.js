@@ -32,6 +32,13 @@ describe('/api/books', function() {
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);
     });
+    it('should return 404 when no book is found', async () => {
+      await Book.collection.insertMany([
+        {title: 't1', price: 100}
+      ]);
+      let res = await request(server).get('/api/books?price=200');
+      expect(res.status).toBe(404);
+    });
   });
   describe('GET one book', () => {
     it('should throw an error when id is invalid', async () => {
