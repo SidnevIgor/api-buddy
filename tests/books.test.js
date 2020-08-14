@@ -78,8 +78,73 @@ describe('/api/books', function() {
         publisher: "Alpina"
       };
       let res = await request(server).post('/api/books').send({...book});
-      console.log(res.body);
       expect(res.body.title).toMatch(book.title);
     });
   });
+
+  describe('PUT one book', () => {
+    it('should throw an error when id is invalid', async () => {
+      let book = {
+        title: "book9",
+        author: "Leo Tolstoy",
+        genre: "Romance",
+        price: 100,
+        issueDate: "2020",
+        publisher: "Alpina"
+      };
+      let res = await request(server).put(`/api/books/1234`).send(book);
+      expect(res.status).toBe(404);
+    });
+    it('should throw an error when validation is not passed', async () => {
+      let book = {
+        title: "book9"
+      };
+      let res = await request(server).put(`/api/books/5f2178c4b1ef5441280c2366`).send(book);
+      expect(res.status).toBe(400);
+    });
+    it('should throw an error when id is not found', async () => {
+      let book = {
+        title: "book9",
+        author: "Leo Tolstoy",
+        genre: "Romance",
+        price: 100,
+        issueDate: "2020",
+        publisher: "Alpina"
+      };
+      let res = await request(server).put(`/api/books/5f2178c4b1ef5441280c2366`).send(book);
+      expect(res.status).toBe(400);
+    });
+    it('should put an object in db', async () => {
+      let book = {
+        title: "book9",
+        author: "Leo Tolstoy",
+        genre: "Romance",
+        price: 100,
+        issueDate: "2020",
+        publisher: "Alpina"
+      };
+      let savedBook = await Book.collection.insertMany([{...book}]);
+
+      let res = await request(server).put(`/api/books/${savedBook.ops[0]._id}`).send({
+        title: "book9",
+        author: "Leo Tolstoy",
+        genre: "Romance",
+        price: 300,
+        issueDate: "2020",
+        publisher: "Alpina"
+      });
+      expect(res.body.price).toEqual(100);
+    });
+  });
+
+  describe('DELETE one book', () => {
+    it('should throw an error when ID validation is not passed', async () => {
+      let res = await request(server).delete('/api/books/1234');
+      expect(res.status).toBe(404);
+    });
+    it('should throw an error when ID validation is not passed', async () => {
+      let res = await request(server).delete('/api/books/5f2178c4b1ef5441280c2366');
+      expect(res.body.deletedCount).toBe(0);
+    });
+  })
 });
