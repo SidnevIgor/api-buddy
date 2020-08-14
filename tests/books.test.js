@@ -146,5 +146,19 @@ describe('/api/books', function() {
       let res = await request(server).delete('/api/books/5f2178c4b1ef5441280c2366');
       expect(res.body.deletedCount).toBe(0);
     });
+    it('should delete one book', async () => {
+      let book = {
+        title: "book9",
+        author: "Leo Tolstoy",
+        genre: "Romance",
+        price: 100,
+        issueDate: "2020",
+        publisher: "Alpina"
+      };
+      let savedBook = await Book.collection.insertMany([{...book}]);
+
+      let res = await request(server).delete(`/api/books/${savedBook.ops[0]._id}`);
+      expect(res.body.deletedCount).toBe(1);
+    });
   })
 });
