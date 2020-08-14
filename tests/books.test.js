@@ -17,10 +17,20 @@ describe('/api/books', function() {
         {title: 't1'},
         {title: 't2'},
         {title: 't3'}
-      ])
+      ]);
       let res = await request(server).get('/api/books');
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(3);
+    });
+    it('should return a book with an additional parameter', async () => {
+      await Book.collection.insertMany([
+        {title: 't1', price: 100},
+        {title: 't2', price: 200},
+        {title: 't3', price: 300}
+      ]);
+      let res = await request(server).get('/api/books?price=200');
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(1);
     });
   });
   describe('GET one book', () => {
