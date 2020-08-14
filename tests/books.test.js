@@ -40,6 +40,7 @@ describe('/api/books', function() {
       expect(res.status).toBe(404);
     });
   });
+
   describe('GET one book', () => {
     it('should throw an error when id is invalid', async () => {
       let res = await request(server).get(`/api/books/1234`);
@@ -56,6 +57,16 @@ describe('/api/books', function() {
       let bookSaved = await book.save();
       let res = await request(server).get(`/api/books/${bookSaved._id}`);
       expect(res.body.title).toMatch(bookSaved.title);
+    });
+  });
+
+  describe('POST one book', () => {
+    it('should return validation error', async () => {
+      let res = await request(server).post('/api/books',{
+        title: 't1',
+        price: 100
+      });
+      expect(res.status).toBe(400);
     });
   });
 });
