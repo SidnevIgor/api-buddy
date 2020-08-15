@@ -82,10 +82,10 @@ describe('/api/books', function() {
 
   describe('POST one book', () => {
     it('should return validation error', async () => {
-      let res = await request(server).post('/api/books').send({
+      let res = await request(server).post('/api/books').set('x-auth-token', token).send({
         title: 't1',
         price: 100
-      }).set('x-auth-token', token);
+      });
       expect(res.status).toBe(400);
     });
     it('should post a book', async () => {
@@ -97,7 +97,7 @@ describe('/api/books', function() {
         issueDate: "2020",
         publisher: "Alpina"
       };
-      let res = await request(server).post('/api/books').send({...book}).set('x-auth-token', token);
+      let res = await request(server).post('/api/books').set('x-auth-token', token).send({...book});
       expect(res.body.title).toMatch(book.title);
     });
   });
