@@ -1,5 +1,6 @@
 const request = require('supertest');
 const config = require('config'); //this is used to store hidden server variables
+const jwt = require('jsonwebtoken');
 
 let server, customer, token, result;
 const { Book } = require('../books/bookSchema');
