@@ -6,7 +6,7 @@ let server, customer, token, result;
 const { Book } = require('../books/bookSchema');
 const { Customer } = require('../customers/customers');
 
-describe('/api/books', function() {
+describe('/api/auth/books', function() {
   beforeEach( async () => {
     server = require('../index');
     customer = new Customer({
