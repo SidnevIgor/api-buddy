@@ -19,6 +19,7 @@ describe('/api/books', function() {
         {title: 't3'}
       ]);
       let res = await request(server).get('/api/books');
+      console.log(res.body); 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(3);
     });
