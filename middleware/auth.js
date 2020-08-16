@@ -4,7 +4,6 @@ const config = require('config');
 module.exports = function auth(req, res, next) {
   let token = req.header('x-auth-token');
   if(!token) {
-    console.log('token not found');
     return res.status(401).send('This route requires authentication');
   }
   else {

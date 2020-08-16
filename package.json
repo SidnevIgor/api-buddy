@@ -4,7 +4,7 @@
   "description": "This is a \"fake\" API allowing to test REST queries within your application",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --verbose --coverage"
+    "test": "jest --watchAll --verbose --coverage --runInBand"
   },
   "author": "Igor Sidnev",
   "license": "ISC",
