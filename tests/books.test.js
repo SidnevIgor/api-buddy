@@ -1,14 +1,18 @@
 const request = require('supertest');
 let server;
 const { Book } = require('../books/bookSchema');
+const { Customer } = require('../customers/customers');
 
 describe('/api/books', function() {
   beforeEach(() => {
-    server = require('../index');
+    if(!server) {
+      server = require('../index');
+    }
   });
   afterEach(async () => {
     server.close();
     await Book.remove({});
+    await Customer.remove({});
   });
 
   describe('GET all books', () => {
@@ -19,7 +23,7 @@ describe('/api/books', function() {
         {title: 't3'}
       ]);
       let res = await request(server).get('/api/books');
-      console.log(res.body); 
+      console.log(res.body);
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(3);
     });

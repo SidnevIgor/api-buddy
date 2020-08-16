@@ -1,4 +1,4 @@
 node_modules/
-errors.log
-errors.log
-*.log
+errors.log/
+*.log/
+coverage/

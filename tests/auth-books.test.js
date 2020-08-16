@@ -8,7 +8,9 @@ const { Customer } = require('../customers/customers');
 
 describe('/api/auth/books', function() {
   beforeEach( async () => {
-    server = require('../index');
+    if(!server) { 
+      server = require('../index');
+    }
     customer = new Customer({
       firstName: "name5",
       lastName: "lname4",
