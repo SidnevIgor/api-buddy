@@ -166,9 +166,9 @@ describe('/api/auth/books', function() {
       let res = await request(server).delete('/api/auth/books/1234').set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
-    it('should throw an error when ID validation is not passed', async () => {
+    it('should throw an error when ID is not found', async () => {
       let res = await request(server).delete('/api/auth/books/5f2178c4b1ef5441280c2366').set('x-auth-token', token);
-      expect(res.body.deletedCount).toBe(0);
+      expect(res.status).toBe(400);
     });
     it('should delete one book', async () => {
       let book = {

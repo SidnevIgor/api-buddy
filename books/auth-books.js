@@ -47,7 +47,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
 
 router.delete('/:id', auth, validateId, async (req, res) => {
   let book = await Book.deleteOne({"_id": req.params.id});
-  if(!book) {
+  if(book.deletedCount === 0) {
     return res.status(400).send('There is no book with a chosen id');
   }
   return res.send(book);
