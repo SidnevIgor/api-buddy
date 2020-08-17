@@ -14,5 +14,5 @@ describe('Testing error validation', () => {
   it('should catch an error', async () => {
     let res = await request(server).get('');
     expect(res.status).toBe(404);
-  })
-})
+  });
+});

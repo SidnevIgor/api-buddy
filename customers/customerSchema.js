@@ -12,7 +12,7 @@ const Customer = mongoose.model('Customer', customerSchema);
 
 const schema = Joi.object({
   firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
+  lastName: Joi.string(),
   email: Joi.string(),
   tel: Joi.string().required(),
   password: Joi.string().required()
