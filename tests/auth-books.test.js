@@ -36,6 +36,15 @@ describe('/api/auth/books', function() {
       let res = await request(server).get('/api/auth/books');
       expect(res.status).toBe(401);
     });
+    it('should return 400 error', async () => {
+      await Book.collection.insertMany([
+        {title: 't1'},
+        {title: 't2'},
+        {title: 't3'}
+      ]);
+      let res = await request(server).get('/api/auth/books').set('x-auth-token', '1234');
+      expect(res.status).toBe(400);
+    });
     it('should return all books', async () => {
       await Book.collection.insertMany([
         {title: 't1'},
