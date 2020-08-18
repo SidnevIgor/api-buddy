@@ -44,7 +44,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
 
 router.delete('/:id', auth, validateId, async (req, res) => {
   let customer = await Customer.deleteOne({"_id": req.params.id});
-  if(!customer) {
+  if(customer.deletedCount === 0) {
     return res.status(400).send('There is no customer with a chosen id');
   }
   return res.send(customer);
