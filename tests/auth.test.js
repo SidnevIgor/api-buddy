@@ -32,11 +32,10 @@ describe('Testing auth validation', () => {
     let res = await request(server).post('/api/auth').send(customer);
     expect(res.status).toBe(200);
   });
-/*  it('should return me', async () => {
+  it('should return me', async () => {
     let me = await request(server).post('/api/auth').send(customer);
-    console.log(me.header['x-auth-token']);
-    let res = await request(server).get('/api/me').header('x-auth-token', me.header['x-auth-token']);
-    console.log(res.body);
+    console.log('The token value is', me.header['x-auth-token']);
+    let res = await request(server).get('/api/me').field('x-auth-token', me.header['x-auth-token']);
     expect(res.status).toBe(200);
-  }); */ 
+  });
 });

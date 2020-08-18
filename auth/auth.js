@@ -33,6 +33,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/me', auth, async (req, res) => {
+  console.log('Getting me: ', req.user._id);
   let customer = await Customer.findById(req.user._id);
   res.send(customer);
 });
