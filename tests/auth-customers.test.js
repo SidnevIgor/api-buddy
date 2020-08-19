@@ -86,7 +86,7 @@ describe('/api/auth/customers', function() {
         firstName: 't1'
       })
       let customersaved = await customer.save();
-      let res = await request(server).get(`/api/customers/${customersaved._id}`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/customers/${customersaved._id}`).set('x-auth-token', token);
       expect(res.status).toBe(200);
       expect(res.body.firstName).toMatch(customersaved.firstName);
     });
