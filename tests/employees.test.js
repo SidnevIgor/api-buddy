@@ -86,7 +86,7 @@ describe('/api/employees', function() {
       let employee = {
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "1",
+        storeId: "5f22e7c0f401da21084d739d",
         position: "manager"
       };
       let res = await request(server).put(`/api/employees/1234`).send(employee);
@@ -103,10 +103,27 @@ describe('/api/employees', function() {
       let employee = {
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "1",
+        storeId: "5f22e7c0f401da21084d739d",
         position: "manager"
       };
       let res = await request(server).put(`/api/employees/5f2178c4b1ef5441280c2366`).send(employee);
+      expect(res.status).toBe(400);
+    });
+    it('should throw an error when store id is not valid', async () => {
+      let employee = {
+        firstName: "Igor1",
+        lastName: "Sidnev",
+        storeId: "5f22e7c0f401da21084d739d",
+        position: "manager"
+      };
+      let savedEmployee = await Employee.collection.insertMany([{...employee}]);
+
+      let res = await request(server).put(`/api/employees/${savedEmployee.ops[0]._id}`).send({
+        firstName: "Igor2",
+        lastName: "Sidnev",
+        storeId: "1",
+        position: "manager"
+      });
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
