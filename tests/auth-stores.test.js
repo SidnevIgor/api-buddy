@@ -2,6 +2,7 @@ const request = require('supertest');
 let server, employee, token;
 const { Store } = require('../stores/storeSchema');
 const { Employee } = require('../employees/employerSchema');
+const { Customer } = require('../customers/customerSchema');
 
 describe('/api/auth/stores', function() {
   beforeEach( async () => {
@@ -29,32 +30,33 @@ describe('/api/auth/stores', function() {
     server.close();
     await Store.remove({});
     await Employee.remove({});
+    await Customer.remove({});
   });
 
   describe('GET all stores', () => {
     it('should return 401 error', async () => {
       await Store.collection.insertMany([
-        {title: 't1'},
-        {title: 't2'},
-        {title: 't3'}
+        {city: 't1'},
+        {city: 't2'},
+        {city: 't3'}
       ]);
       let res = await request(server).get('/api/auth/stores');
       expect(res.status).toBe(401);
     });
     it('should return 400 error', async () => {
       await Store.collection.insertMany([
-        {title: 't1'},
-        {title: 't2'},
-        {title: 't3'}
+        {city: 't1'},
+        {city: 't2'},
+        {city: 't3'}
       ]);
       let res = await request(server).get('/api/auth/stores').set('x-auth-token', '1234');
       expect(res.status).toBe(400);
     });
     it('should return all stores', async () => {
       await Store.collection.insertMany([
-        {title: 't1'},
-        {title: 't2'},
-        {title: 't3'}
+        {city: 't1'},
+        {city: 't2'},
+        {city: 't3'}
       ]);
       let res = await request(server).get('/api/auth/stores').set('x-auth-token', token);
       expect(res.status).toBe(200);
@@ -62,19 +64,19 @@ describe('/api/auth/stores', function() {
     });
     it('should return a Store with an additional parameter', async () => {
       await Store.collection.insertMany([
-        {title: 't1', price: 100},
-        {title: 't2', price: 200},
-        {title: 't3', price: 300}
+        {city: 't1', building: "100"},
+        {city: 't2', building: "200"},
+        {city: 't3', building: "300"}
       ]);
-      let res = await request(server).get('/api/auth/stores?price=200').set('x-auth-token', token);
+      let res = await request(server).get('/api/auth/stores?building=200').set('x-auth-token', token);
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);
     });
     it('should return 404 when no Store is found', async () => {
       await Store.collection.insertMany([
-        {title: 't1', price: 100}
+        {city: 't1', building: 100}
       ]);
-      let res = await request(server).get('/api/auth/stores?price=200').set('x-auth-token', token);
+      let res = await request(server).get('/api/auth/stores?building=200').set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
   });
@@ -90,43 +92,43 @@ describe('/api/auth/stores', function() {
     });
     it('should retun one Store', async () => {
       let Store = new Store({
-        title: 't1'
+        city: 't1'
       })
       let storesaved = await Store.save();
       let res = await request(server).get(`/api/auth/stores/${storesaved._id}`).set('x-auth-token', token);
-      expect(res.body.title).toMatch(storesaved.title);
+      expect(res.body.city).toMatch(storesaved.city);
     });
   });
 
   describe('POST one Store', () => {
     it('should return validation error', async () => {
       let res = await request(server).post('/api/auth/stores').set('x-auth-token', token).send({
-        title: 't1',
-        price: 100
+        city: 't1',
+        building: 100
       });
       expect(res.status).toBe(400);
     });
     it('should post a Store', async () => {
       let Store = {
-        title: "Store9",
+        city: "Store9",
         author: "Leo Tolstoy",
         genre: "Romance",
-        price: 100,
+        building: 100,
         issueDate: "2020",
         publisher: "Alpina"
       };
       let res = await request(server).post('/api/auth/stores').set('x-auth-token', token).send({...Store});
-      expect(res.body.title).toMatch(Store.title);
+      expect(res.body.city).toMatch(Store.city);
     });
   });
 
   describe('PUT one Store', () => {
     it('should throw an error when id is invalid', async () => {
       let Store = {
-        title: "Store9",
+        city: "Store9",
         author: "Leo Tolstoy",
         genre: "Romance",
-        price: 100,
+        building: 100,
         issueDate: "2020",
         publisher: "Alpina"
       };
@@ -135,17 +137,17 @@ describe('/api/auth/stores', function() {
     });
     it('should throw an error when validation is not passed', async () => {
       let Store = {
-        title: "Store9"
+        city: "Store9"
       };
       let res = await request(server).put(`/api/auth/stores/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(Store);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
       let Store = {
-        title: "Store9",
+        city: "Store9",
         author: "Leo Tolstoy",
         genre: "Romance",
-        price: 100,
+        building: 100,
         issueDate: "2020",
         publisher: "Alpina"
       };
@@ -154,24 +156,24 @@ describe('/api/auth/stores', function() {
     });
     it('should put an object in db', async () => {
       let Store = {
-        title: "Store9",
+        city: "Store9",
         author: "Leo Tolstoy",
         genre: "Romance",
-        price: 100,
+        building: 100,
         issueDate: "2020",
         publisher: "Alpina"
       };
       let savedStore = await Store.collection.insertMany([{...Store}]);
 
       let res = await request(server).put(`/api/auth/stores/${savedStore.ops[0]._id}`).set('x-auth-token', token).send({
-        title: "Store9",
+        city: "Store9",
         author: "Leo Tolstoy",
         genre: "Romance",
-        price: 300,
+        building: 300,
         issueDate: "2020",
         publisher: "Alpina"
       });
-      expect(res.body.price).toEqual(100);
+      expect(res.body.building).toEqual(100);
     });
   });
 
@@ -186,10 +188,10 @@ describe('/api/auth/stores', function() {
     });
     it('should delete one Store', async () => {
       let Store = {
-        title: "Store9",
+        city: "Store9",
         author: "Leo Tolstoy",
         genre: "Romance",
-        price: 100,
+        building: 100,
         issueDate: "2020",
         publisher: "Alpina"
       };
