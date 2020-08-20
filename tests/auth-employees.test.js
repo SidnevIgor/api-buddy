@@ -44,7 +44,7 @@ describe('/api/auth/employees', function() {
       expect(res.status).toBe(400);
     });
     it('should return all employees', async () => {
-      await employee.collection.insertMany([
+      await Employee.collection.insertMany([
         {firstName: 't1'},
         {firstName: 't2'},
         {firstName: 't3'}
