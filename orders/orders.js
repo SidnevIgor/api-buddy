@@ -55,7 +55,7 @@ router.put('/:id', validateId, async (req, res) => {
 
 router.delete('/:id', validateId, async (req, res) => {
   let order = await Order.deleteOne({"_id": req.params.id});
-  if(!order) {
+  if(order.deletedCount === 0) {
     return res.status(400).send('There is no order with a chosen id');
   }
   return res.send(order);
