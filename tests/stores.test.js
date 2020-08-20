@@ -19,6 +19,7 @@ describe('/api/stores', function() {
   afterEach(async () => {
     server.close();
     await Store.remove({});
+    await Employee.remove({});
   });
 
   describe('GET all stores', () => {
@@ -78,6 +79,17 @@ describe('/api/stores', function() {
       });
       expect(res.status).toBe(400);
     });
+    it('should return a 400 error when employeeId is wrong', async () => {
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: ['1234']
+      };
+      let res = await request(server).post('/api/stores').send({...store});
+      expect(res.status).toBe(400);
+    });
     it('should post a Store', async () => {
       let store = {
         city: 'Moscow',
@@ -119,6 +131,25 @@ describe('/api/stores', function() {
         employees: [employee._id]
       };
       let res = await request(server).put(`/api/stores/5f2178c4b1ef5441280c2366`).send(store);
+      expect(res.status).toBe(400);
+    });
+    it('should put an object in db', async () => {
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: [employee._id]
+      };
+      let savedStore = await Store.collection.insertMany([{...store}]);
+
+      let res = await request(server).put(`/api/stores/${savedStore.ops[0]._id}`).send({
+        city: 'Ufa',
+        street: 'Novosibirskaya',
+        building: '7',
+        postcode: '107497',
+        employees: ['1234']
+      });
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
