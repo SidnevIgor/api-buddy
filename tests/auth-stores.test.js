@@ -1,4 +1,7 @@
+const jwt = require('jsonwebtoken');
+const config = require('config'); //this is used to store hidden server variables
 const request = require('supertest');
+
 let server, employee, token;
 const { Store } = require('../stores/storeSchema');
 const { Employee } = require('../employees/employerSchema');
@@ -91,12 +94,12 @@ describe('/api/auth/stores', function() {
       expect(res.status).toBe(404);
     });
     it('should retun one Store', async () => {
-      let Store = new Store({
+      let store = new Store({
         city: 't1'
       })
-      let storesaved = await Store.save();
-      let res = await request(server).get(`/api/auth/stores/${storesaved._id}`).set('x-auth-token', token);
-      expect(res.body.city).toMatch(storesaved.city);
+      let storeSaved = await store.save();
+      let res = await request(server).get(`/api/auth/stores/${storeSaved._id}`).set('x-auth-token', token);
+      expect(res.body.city).toMatch(storeSaved.city);
     });
   });
 
@@ -108,72 +111,97 @@ describe('/api/auth/stores', function() {
       });
       expect(res.status).toBe(400);
     });
-    it('should post a Store', async () => {
-      let Store = {
-        city: "Store9",
-        author: "Leo Tolstoy",
-        genre: "Romance",
-        building: 100,
-        issueDate: "2020",
-        publisher: "Alpina"
+    it('should return 400 error', async () => {
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: ['1234']
       };
-      let res = await request(server).post('/api/auth/stores').set('x-auth-token', token).send({...Store});
-      expect(res.body.city).toMatch(Store.city);
+      let res = await request(server).post('/api/auth/stores').set('x-auth-token', token).send({...store});
+      expect(res.status).toBe(400);
+    });
+    it('should post a Store', async () => {
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: [employee._id]
+      };
+      let res = await request(server).post('/api/auth/stores').set('x-auth-token', token).send({...store});
+      expect(res.body.city).toMatch(store.city);
     });
   });
 
   describe('PUT one Store', () => {
     it('should throw an error when id is invalid', async () => {
-      let Store = {
-        city: "Store9",
-        author: "Leo Tolstoy",
-        genre: "Romance",
-        building: 100,
-        issueDate: "2020",
-        publisher: "Alpina"
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: [employee._id]
       };
-      let res = await request(server).put(`/api/auth/stores/1234`).set('x-auth-token', token).send(Store);
+      let res = await request(server).put(`/api/auth/stores/1234`).set('x-auth-token', token).send(store);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
-      let Store = {
+      let store = {
         city: "Store9"
       };
-      let res = await request(server).put(`/api/auth/stores/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(Store);
+      let res = await request(server).put(`/api/auth/stores/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(store);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
-      let Store = {
-        city: "Store9",
-        author: "Leo Tolstoy",
-        genre: "Romance",
-        building: 100,
-        issueDate: "2020",
-        publisher: "Alpina"
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: [employee._id]
       };
-      let res = await request(server).put(`/api/auth/stores/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(Store);
+      let res = await request(server).put(`/api/auth/stores/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(store);
+      expect(res.status).toBe(400);
+    });
+    it('should throw 400 error', async () => {
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: [employee._id]
+      };
+      let savedStore = await Store.collection.insertMany([{...store}]);
+
+      let res = await request(server).put(`/api/auth/stores/${savedStore.ops[0]._id}`).set('x-auth-token', token).send({
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '7',
+        postcode: '107497',
+        employees: ['1234']
+      });
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
-      let Store = {
-        city: "Store9",
-        author: "Leo Tolstoy",
-        genre: "Romance",
-        building: 100,
-        issueDate: "2020",
-        publisher: "Alpina"
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: [employee._id]
       };
-      let savedStore = await Store.collection.insertMany([{...Store}]);
+      let savedStore = await Store.collection.insertMany([{...store}]);
 
       let res = await request(server).put(`/api/auth/stores/${savedStore.ops[0]._id}`).set('x-auth-token', token).send({
-        city: "Store9",
-        author: "Leo Tolstoy",
-        genre: "Romance",
-        building: 300,
-        issueDate: "2020",
-        publisher: "Alpina"
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '7',
+        postcode: '107497',
+        employees: [employee._id]
       });
-      expect(res.body.building).toEqual(100);
+      expect(res.body.building).toEqual('6');
     });
   });
 
@@ -187,15 +215,14 @@ describe('/api/auth/stores', function() {
       expect(res.status).toBe(400);
     });
     it('should delete one Store', async () => {
-      let Store = {
-        city: "Store9",
-        author: "Leo Tolstoy",
-        genre: "Romance",
-        building: 100,
-        issueDate: "2020",
-        publisher: "Alpina"
+      let store = {
+        city: 'Moscow',
+        street: 'Novosibirskaya',
+        building: '6',
+        postcode: '107497',
+        employees: [employee._id]
       };
-      let savedStore = await Store.collection.insertMany([{...Store}]);
+      let savedStore = await Store.collection.insertMany([{...store}]);
 
       let res = await request(server).delete(`/api/auth/stores/${savedStore.ops[0]._id}`).set('x-auth-token', token);
       expect(res.body.deletedCount).toBe(1);
