@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 
 const orderSchema = new mongoose.Schema({
+  orderId: Number,
   date: String,
   employeeId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,6 +22,7 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model('Order', orderSchema);
 
 const schema = Joi.object({
+  orderId: Joi.number().required(),
   date: Joi.date().required(),
   employeeId: Joi.string().required(),
   customerId: Joi.string().required(),

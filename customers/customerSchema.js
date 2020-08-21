@@ -2,6 +2,7 @@ const Joi = require('joi'); //validation package
 const mongoose = require('mongoose');
 
 const customerSchema = new mongoose.Schema({
+  customerId: Number,
   firstName: String,
   lastName: String,
   email: String,
@@ -11,6 +12,7 @@ const customerSchema = new mongoose.Schema({
 const Customer = mongoose.model('Customer', customerSchema);
 
 const schema = Joi.object({
+  customerId: Joi.number().required(),
   firstName: Joi.string().required(),
   lastName: Joi.string(),
   email: Joi.string(),

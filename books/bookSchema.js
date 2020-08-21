@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bookSchema = mongoose.Schema({ //here we create a mongoose schema
+  bookId: Number,
   title: String,
   author: String,
   genre: String,
@@ -13,6 +14,7 @@ const Book = mongoose.model('Book', bookSchema); //here we create a class based 
 const Joi = require('joi'); //validation package
 
 const schema = Joi.object({
+  bookId: Joi.number().required(),
   title: Joi.string().required(),
   author: Joi.string().required().pattern(new RegExp('^[a-zA-Z]{2,}(?: [a-zA-Z]+){0,2}$')),
   genre: Joi.string().required(),

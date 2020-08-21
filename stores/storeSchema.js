@@ -1,6 +1,7 @@
 const Joi = require('joi'); //validation package
 const mongoose = require('mongoose');
 const storeSchema = new mongoose.Schema({
+  storeId: Number,
   city: String,
   street: String,
   building: String,
@@ -13,6 +14,7 @@ const storeSchema = new mongoose.Schema({
 const Store = mongoose.model('Store', storeSchema);
 
 const schema = Joi.object({
+  storeId: Joi.number().required(),
   city: Joi.string().required(),
   street: Joi.string().required(),
   building: Joi.string(),
