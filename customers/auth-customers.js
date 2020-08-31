@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+
 const validateId = require('../middleware/validateId');
 const auth = require('../middleware/auth');
+const cleanResponse = require('../middleware/cleanResponse');
 
 const { Customer, schema } = require('./customerSchema');
 
@@ -17,12 +19,12 @@ router.get('/', auth, async (req, res) => {
   else {
     customers = await Customer.find().sort({ [req.query.sortBy]: 1 });
   }
-  return res.send(customers);
+  return res.send(cleanResponse(customers));
 });
 router.get('/:id', auth, validateId, async (req, res) => {
   let customer = await Customer.findById(req.params.id);
   if(!customer) return res.status(404).send('There is no customer with such id');
-  return res.send(customer);
+  return res.send(cleanResponse(customer));
 });
 
 router.post('/', auth, async (req, res) => {
@@ -39,7 +41,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
   if(!customer) {
     return res.status(400).send('There is no customer with a chosen id');
   }
-  return res.send(customer);
+  return res.send(req.body);
 });
 
 router.delete('/:id', auth, validateId, async (req, res) => {
@@ -47,7 +49,7 @@ router.delete('/:id', auth, validateId, async (req, res) => {
   if(customer.deletedCount === 0) {
     return res.status(400).send('There is no customer with a chosen id');
   }
-  return res.send(customer);
+  return res.send(req.body);
 });
 
 module.exports.router = router;

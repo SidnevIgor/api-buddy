@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+
 const validateId = require('../middleware/validateId');
+const cleanResponse = require('../middleware/cleanResponse');
+
 const { Store, schema } = require('./storeSchema');
 
 router.get('/', async (req, res) => {
@@ -14,12 +17,12 @@ router.get('/', async (req, res) => {
   else {
     stores = await Store.find().sort({ [req.query.sortBy]: 1 });
   }
-  return res.send(stores);
+  return res.send(cleanResponse(stores));
 });
 router.get('/:id', validateId, async (req, res) => {
   let store = await Store.findById(req.params.id);
   if(!store) return res.status(404).send('There is no store with such id');
-  return res.send(store);
+  return res.send(cleanResponse(store));
 });
 
 router.post('/', async (req, res) => {
@@ -30,7 +33,7 @@ router.post('/', async (req, res) => {
 
   try {
     let result = await store.save();
-    return res.send(result);
+    return res.send(cleanResponse(result));
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -48,7 +51,7 @@ router.put('/:id', validateId, async (req, res) => {
     if(!store) {
       return res.status(400).send('There is no store with a chosen id');
     }
-    return res.send(store);
+    return res.send(req.body);
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -60,7 +63,7 @@ router.delete('/:id', validateId, async (req, res) => {
   if(store.deletedCount === 0) {
     return res.status(400).send('There is no store with a chosen id');
   }
-  return res.send(store);
+  return res.send(req.body);
 });
 
 module.exports = router;

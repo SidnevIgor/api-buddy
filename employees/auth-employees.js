@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+
 const validateId = require('../middleware/validateId');
 const auth = require('../middleware/auth');
+const cleanResponse = require('../middleware/cleanResponse');
 
 const { Employee, schema } = require('./employerSchema');
 
@@ -16,12 +18,12 @@ router.get('/', auth, async (req, res) => {
   else {
     employees = await Employee.find().sort({ [req.query.sortBy]: 1 });
   }
-  return res.send(employees);
+  return res.send(cleanResponse(employees));
 });
 router.get('/:id', auth, validateId, async (req, res) => {
   let employee = await Employee.findById(req.params.id);
   if(!employee) return res.status(404).send('There is no employee with such id');
-  return res.send(employee);
+  return res.send(cleanResponse(employee));
 });
 
 router.post('/', auth, async (req, res) => {
@@ -32,7 +34,7 @@ router.post('/', auth, async (req, res) => {
 
   try { //additional error validation
     let result = await employee.save();
-    return res.send(result);
+    return res.send(cleanResponse(result));
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -49,7 +51,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
     if(!employee) {
       return res.status(400).send('There is no employee with a chosen id');
     }
-    return res.send(employee);
+    return res.send(req.body);
   }
   catch (e) {
     return res.status(400).send(e.message);
@@ -61,7 +63,7 @@ router.delete('/:id', auth, validateId, async (req, res) => {
   if(employee.deletedCount === 0) {
     return res.status(400).send('There is no employee with a chosen id');
   }
-  return res.send(employee);
+  return res.send(req.body);
 });
 
 module.exports = router;

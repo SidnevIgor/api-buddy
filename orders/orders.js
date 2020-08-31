@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+
 const validateId = require('../middleware/validateId');
+const cleanResponse = require('../middleware/cleanResponse');
+
 const { Order, schema } = require('./orderSchema');
 
 router.get('/', async (req, res) => {
@@ -15,12 +18,12 @@ router.get('/', async (req, res) => {
   else {
     orders = await Order.find().sort({ [req.query.sortBy]: 1 });
   }
-  return res.send(orders);
+  return res.send(cleanResponse(orders));
 });
 router.get('/:id', validateId, async (req, res) => {
   let order = await Order.findById(req.params.id);
   if(!order) return res.status(404).send('There is no order with such id');
-  return res.send(order);
+  return res.send(cleanResponse(order));
 });
 
 router.post('/', async (req, res) => {
@@ -29,7 +32,7 @@ router.post('/', async (req, res) => {
   let order = new Order({...req.body});
   try {
     let result = await order.save();
-    return res.send(result);
+    return res.send(cleanResponse(result));
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -46,7 +49,7 @@ router.put('/:id', validateId, async (req, res) => {
     if(!order) {
       return res.status(400).send('There is no order with a chosen id');
     }
-    return res.send(order);
+    return res.send(req.body);
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -58,7 +61,7 @@ router.delete('/:id', validateId, async (req, res) => {
   if(order.deletedCount === 0) {
     return res.status(400).send('There is no order with a chosen id');
   }
-  return res.send(order);
+  return res.send(req.body);
 });
 
 module.exports = router;

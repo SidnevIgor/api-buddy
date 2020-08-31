@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
 
   let book = new Book({...req.body});
   const result = await book.save();
-  return res.send(result);
+  return res.send(cleanResponse(result));
 });
 
 router.put('/:id', validateId, async (req, res) => {
@@ -43,7 +43,7 @@ router.put('/:id', validateId, async (req, res) => {
   if(!book) {
     return res.status(400).send('There is no book with a chosen id');
   }
-  return res.send(book);
+  return res.send(req.body);
 });
 
 router.delete('/:id', validateId, async (req, res) => {
@@ -51,7 +51,7 @@ router.delete('/:id', validateId, async (req, res) => {
   if(book.deletedCount === 0) {
     return res.status(400).send('There is no book with a chosen id');
   }
-  return res.send(book);
+  return res.send(req.body);
 });
 
 module.exports = router;
