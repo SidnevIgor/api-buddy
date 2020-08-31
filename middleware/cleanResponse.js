@@ -9,8 +9,8 @@ module.exports = function(obj) {
     return arr;
   }
   else {
-    let ob = { ...obj };
+    let ob = { ...obj._doc };
     delete ob._id;
-    return obj;
+    return ob;
   }
 }

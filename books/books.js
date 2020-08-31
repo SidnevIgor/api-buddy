@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', validateId, async (req, res) => {
   let book = await Book.findById(req.params.id);
   if(!book) return res.status(404).send('There is no book with such id');
-  return res.send(book);
+  return res.send(cleanResponse(book));
 });
 
 router.post('/', async (req, res) => {
