@@ -1,10 +1,17 @@
-module.exports = async function(req, res, next) {
-  if(res.statusCode === 200) {
-    console.log('Success!!!');
-    console.log(val);
-    res.on('finish', () => console.log(res));
+module.exports = function(obj) {
+  if(Array.isArray(obj)) {
+    let arr = [];
+    for (let i = 0; i < obj.length; i++) {
+      let ob = {...obj[i]._doc};
+      delete ob._id;
+      delete obj._v;
+      arr.push(ob);
+    }
+    return arr;
   }
   else {
-    next();
+    console.log('Entered delete condition');
+    delete obj[i]._id, obj[i].__v;
+    return obj;
   }
 }

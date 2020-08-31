@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const validateId = require('../middleware/validateId');
-const response = require('../middleware/response');
+const cleanResponse = require('../middleware/cleanResponse');
 
 const { Book, schema } = require('./bookSchema'); //here we create a class based on mongoose schema
 
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   else {
     books = await Book.find().sort({ [req.query.sortBy]: 1 });
   }
-  return res.send(books);
+  return res.send(cleanResponse(books));
 });
 router.get('/:id', validateId, async (req, res) => {
   let book = await Book.findById(req.params.id);
