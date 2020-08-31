@@ -7,7 +7,7 @@ const bookSchema = mongoose.Schema({ //here we create a mongoose schema
   price: Number,
   issueDate: { type: Date, default: Date.now },
   publisher: String
-});
+}, { versionKey: false });
 
 const Book = mongoose.model('Book', bookSchema); //here we create a class based on mongoose schema
 

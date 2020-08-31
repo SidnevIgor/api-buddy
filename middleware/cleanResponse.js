@@ -4,7 +4,7 @@ module.exports = function(obj) {
     for (let i = 0; i < obj.length; i++) {
       let ob = {...obj[i]._doc};
       delete ob._id;
-      delete obj._v;
+      delete obj.__v;
       arr.push(ob);
     }
     return arr;

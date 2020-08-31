@@ -8,7 +8,7 @@ const customerSchema = new mongoose.Schema({
   email: String,
   tel: String,
   password: String
-});
+}, { versionKey: false });
 const Customer = mongoose.model('Customer', customerSchema);
 
 const schema = Joi.object({

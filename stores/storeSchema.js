@@ -10,7 +10,7 @@ const storeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Employee'
   }]
-});
+}, { versionKey: false });
 const Store = mongoose.model('Store', storeSchema);
 
 const schema = Joi.object({

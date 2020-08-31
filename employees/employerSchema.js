@@ -9,7 +9,7 @@ const employeeSchema = new mongoose.Schema({
     ref: 'Store'
   },
   position: String
-});
+}, { versionKey: false });
 const Employee = mongoose.model('Employee', employeeSchema);
 
 const schema = Joi.object({

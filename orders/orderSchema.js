@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Book'
   }]
-});
+}, { versionKey: false });
 const Order = mongoose.model('Order', orderSchema);
 
 const schema = Joi.object({
