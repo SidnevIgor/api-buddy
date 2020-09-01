@@ -21,7 +21,7 @@ router.get('/', auth, async (req, res) => {
   return res.send(cleanResponse(books));
 });
 router.get('/:id', auth, validateId, async (req, res) => {
-  let book = await Book.findById(req.params.id);
+  let book = await Book.find({bookId: req.params.id});
   if(!book) return res.status(404).send('There is no book with such id');
   return res.send(cleanResponse(book));
 });
@@ -40,7 +40,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
   if(validation.error) {
     return res.status(400).send(validation.error);
   }
-  let book = await Book.findOneAndUpdate({"_id":req.params.id}, {...req.body});
+  let book = await Book.findOneAndUpdate({"bookId":req.params.id}, {...req.body});
   if(!book) {
     return res.status(400).send('There is no book with a chosen id');
   }
@@ -48,7 +48,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
 });
 
 router.delete('/:id', auth, validateId, async (req, res) => {
-  let book = await Book.deleteOne({"_id": req.params.id});
+  let book = await Book.deleteOne({"bookId": req.params.id});
   if(book.deletedCount === 0) {
     return res.status(400).send('There is no book with a chosen id');
   }
