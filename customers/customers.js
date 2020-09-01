@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
   return res.send(cleanResponse(customers));
 });
 router.get('/:id', validateId, async (req, res) => {
-  let customer = await Customer.findById(req.params.id);
+  let customer = await Customer.find({customerId: req.params.id});
   if(!customer) return res.status(404).send('There is no customer with such id');
   return res.send(cleanResponse(customer));
 });
@@ -36,7 +36,7 @@ router.put('/:id', validateId, async (req, res) => {
     return res.status(400).send(validation.error);
   }
 
-  let customer = await Customer.findOneAndUpdate({"_id":req.params.id}, {...req.body});
+  let customer = await Customer.findOneAndUpdate({"customerId":req.params.id}, {...req.body});
   if(!customer) {
     return res.status(400).send('There is no customer with a chosen id');
   }
@@ -44,7 +44,7 @@ router.put('/:id', validateId, async (req, res) => {
 });
 
 router.delete('/:id', validateId, async (req, res) => {
-  let customer = await Customer.deleteOne({"_id": req.params.id});
+  let customer = await Customer.deleteOne({"customerId": req.params.id});
   if(customer.deletedCount === 0) {
     return res.status(400).send('There is no customer with a chosen id');
   }
