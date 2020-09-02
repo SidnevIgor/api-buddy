@@ -8,12 +8,9 @@ const cleanResponse = require('../middleware/cleanResponse');
 const { Order, schema } = require('./orderSchema');
 
 router.get('/', auth, async (req, res) => {
-  let selector = req.query.date?'date':req.query.employeeId?'employeeId':req.query.customerId?'customerId':req.query.orderTotal?'orderTotal':req.query.books?'books':null;
-  let findVal = req.query.date?req.query.date:req.query.employeeId?req.query.employeeId:req.query.customerId?req.query.customerId:req.query.orderTotal?req.query.orderTotal:req.query.books?req.query.books:null;
   let orders = [];
-
-  if(selector) {
-    orders = await Order.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
+  if(req.query) {
+    orders = await Order.find({ ...req.query }).sort({ [req.query.sortBy]: 1 });
     if(orders.length === 0) return res.status(404).send('There is no orders with such parameters');
   }
   else {

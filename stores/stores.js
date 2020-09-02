@@ -7,11 +7,9 @@ const cleanResponse = require('../middleware/cleanResponse');
 const { Store, schema } = require('./storeSchema');
 
 router.get('/', async (req, res) => {
-  let selector = req.query.city?'city':req.query.street?'street':req.query.building?'building':req.query.postcode?'postcode':req.query.employees?'employees':null;
-  let findVal = req.query.city?req.query.city:req.query.street?req.query.street:req.query.building?req.query.building:req.query.postcode?req.query.postcode:req.query.employees?req.query.employees:null;
   let stores = [];
-  if(selector) {
-    stores = await Store.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
+  if(req.query) {
+    stores = await Store.find({ ...req.query }).sort({ [req.query.sortBy]: 1 });
     if(stores.length === 0) return res.status(404).send('There is no stores with such parameters');
   }
   else {
