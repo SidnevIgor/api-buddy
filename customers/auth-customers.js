@@ -9,11 +9,9 @@ const { Customer, schema } = require('./customerSchema');
 
 
 router.get('/', auth, async (req, res) => {
-  let selector = req.query.firstName?'firstName':req.query.lastName?'lastName':req.query.email?'email':req.query.tel?'tel':null;
-  let findVal = req.query.firstName?req.query.firstName:req.query.lastName?req.query.lastName:req.query.email?req.query.email:req.query.tel?req.query.tel:null;
   let customers = [];
-  if(selector) {
-    customers = await Customer.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
+  if(req.query) {
+    customers = await Customer.find({ ...req.query }).sort({ [req.query.sortBy]: 1 });
     if(customers.length === 0) return res.status(404).send('There is no customers with such parameters');
   }
   else {

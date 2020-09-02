@@ -8,11 +8,9 @@ const cleanResponse = require('../middleware/cleanResponse');
 const { Employee, schema } = require('./employerSchema');
 
 router.get('/', auth, async (req, res) => {
-  let selector = req.query.firstName?'firstName':req.query.lastName?'lastName':req.query.storeId?'storeId':req.query.position?'position':null;
-  let findVal = req.query.firstName?req.query.firstName:req.query.lastName?req.query.lastName:req.query.storeId?req.query.storeId:req.query.position?req.query.position:null;
   let employees = [];
-  if(selector) {
-    employees = await Employee.find({ [selector]: [findVal] }).sort({ [req.query.sortBy]: 1 });
+  if(req.query) {
+    employees = await Employee.find({ ...req.query }).sort({ [req.query.sortBy]: 1 });
     if(employees.length === 0) return res.status(404).send('There is no employees with such parameters');
   }
   else {
