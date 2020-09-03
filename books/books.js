@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
   if(validation.error) { return res.status(400).send(validation.error); }
 
   let book = new Book({...req.body});
-  const result = await book.save();
-  return res.send(cleanResponse(result));
+  //const result = await book.save();
+  return res.send(cleanResponse(book));
 });
 
 router.put('/:id', validateId, async (req, res) => {
@@ -37,7 +37,8 @@ router.put('/:id', validateId, async (req, res) => {
   if(validation.error) {
     return res.status(400).send(validation.error);
   }
-  let book = await Book.findOneAndUpdate({"bookId":req.params.id}, {...req.body});
+  //let book = await Book.findOneAndUpdate({"bookId":req.params.id}, {...req.body});
+  let book = await Book.find({"bookId":req.params.id});
   if(!book) {
     return res.status(400).send('There is no book with a chosen id');
   }
@@ -45,11 +46,12 @@ router.put('/:id', validateId, async (req, res) => {
 });
 
 router.delete('/:id', validateId, async (req, res) => {
-  let book = await Book.deleteOne({"bookId": req.params.id});
-  if(book.deletedCount === 0) {
+  //let book = await Book.deleteOne({"bookId": req.params.id});
+  let book = await Book.find({"bookId":req.params.id});
+  if(!book) {
     return res.status(400).send('There is no book with a chosen id');
   }
-  return res.send(req.body);
+  return res.send(book);
 });
 
 module.exports = router;
