@@ -30,8 +30,8 @@ router.post('/', async (req, res) => {
   let store = new Store({...req.body});
 
   try {
-    let result = await store.save();
-    return res.send(cleanResponse(result));
+    //let result = await store.save();
+    return res.send(cleanResponse(store));
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -45,7 +45,8 @@ router.put('/:id', validateId, async (req, res) => {
   }
 
   try {
-    let store = await Store.findOneAndUpdate({ "storeId": req.params.id }, { ...req.body });
+    //let store = await Store.findOneAndUpdate({ "storeId": req.params.id }, { ...req.body });
+    let store = await Store.find({ "storeId": req.params.id });
     if(!store) {
       return res.status(400).send('There is no store with a chosen id');
     }
@@ -57,11 +58,12 @@ router.put('/:id', validateId, async (req, res) => {
 });
 
 router.delete('/:id', validateId, async (req, res) => {
-  let store = await Store.deleteOne({"storeId": req.params.id});
-  if(store.deletedCount === 0) {
+  //let store = await Store.deleteOne({"storeId": req.params.id});
+  let store = await Store.find({ "storeId": req.params.id });
+  if(!store) {
     return res.status(400).send('There is no store with a chosen id');
   }
-  return res.send(req.body);
+  return res.send(store);
 });
 
 module.exports = router;
