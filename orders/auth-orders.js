@@ -29,8 +29,8 @@ router.post('/', auth, async (req, res) => {
   if(validation.error) { return res.status(400).send(validation.error); }
   let order = new Order({...req.body});
   try {
-    let result = await order.save();
-    return res.send(cleanResponse(result));
+    //let result = await order.save();
+    return res.send(cleanResponse(order));
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -43,7 +43,8 @@ router.put('/:id', auth, validateId, async (req, res) => {
     return res.status(400).send(validation.error);
   }
   try {
-    let order = await Order.findOneAndUpdate({ "orderId": req.params.id }, { ...req.body });
+    //let order = await Order.findOneAndUpdate({ "orderId": req.params.id }, { ...req.body });
+    let order = await Order.find({ "orderId": req.params.id });
     if(!order) {
       return res.status(400).send('There is no order with a chosen id');
     }
@@ -55,11 +56,12 @@ router.put('/:id', auth, validateId, async (req, res) => {
 });
 
 router.delete('/:id', auth, validateId, async (req, res) => {
-  let order = await Order.deleteOne({"orderId": req.params.id});
-  if(order.deletedCount === 0) {
+  //let order = await Order.deleteOne({"orderId": req.params.id});
+  let order = await Order.find({ "orderId": req.params.id });
+  if(!order) {
     return res.status(400).send('There is no order with a chosen id');
   }
-  return res.send(req.body);
+  return res.send(order);
 });
 
 module.exports = router;
