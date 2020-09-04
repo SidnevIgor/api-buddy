@@ -171,7 +171,7 @@ describe('/api/auth/books', function() {
         issueDate: "2020",
         publisher: "Alpina"
       });
-      expect(res.body.price).toEqual(100);
+      expect(res.body.price).toEqual(300);
     });
   });
 

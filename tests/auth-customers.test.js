@@ -74,11 +74,11 @@ describe('/api/auth/customers', function() {
 
   describe('GET one customer', () => {
     it('should throw an error when id is invalid', async () => {
-      let res = await request(server).get(`/api/auth/customers/1234`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/customers/12dsg34`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when id is not found', async () => {
-      let res = await request(server).get(`/api/auth/customers/5f355ce806f38631fc33530d`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/customers/2`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should retun one customer', async () => {
@@ -101,6 +101,7 @@ describe('/api/auth/customers', function() {
     });
     it('should post a customer', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
@@ -115,13 +116,14 @@ describe('/api/auth/customers', function() {
   describe('PUT one customer', () => {
     it('should throw an error when id is invalid', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
         tel: "123-456-789",
         password: "1234"
       };
-      let res = await request(server).put(`/api/auth/customers/1234`).set('x-auth-token', token).send(customer);
+      let res = await request(server).put(`/api/auth/customers/sdjhfg`).set('x-auth-token', token).send(customer);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
@@ -136,17 +138,19 @@ describe('/api/auth/customers', function() {
     });
     it('should throw an error when id is not found', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
         tel: "123-456-789",
         password: "1234"
       };
-      let res = await request(server).put(`/api/auth/customers/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(customer);
+      let res = await request(server).put(`/api/auth/customers/2`).set('x-auth-token', token).send(customer);
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
@@ -155,28 +159,30 @@ describe('/api/auth/customers', function() {
       };
       let savedcustomer = await Customer.collection.insertMany([{...customer}]);
 
-      let res = await request(server).put(`/api/auth/customers/${savedcustomer.ops[0]._id}`).set('x-auth-token', token).send({
+      let res = await request(server).put(`/api/auth/customers/${savedcustomer.ops[0].customerId}`).set('x-auth-token', token).send({
+        customerId: 1,
         firstName: "name6",
         lastName: "lname4",
         email: "test@gmail.com",
         tel: "123-456-789",
         password: "123456"
       });
-      expect(res.body.firstName).toEqual('name5');
+      expect(res.body.firstName).toEqual('name6');
     });
   });
 
   describe('DELETE one customer', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/auth/customers/1234').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/customers/12dff34').set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/auth/customers/5f2178c4b1ef5441280c2366').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/customers/2').set('x-auth-token', token);
       expect(res.status).toBe(400);
     });
     it('should delete one customer', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name6",
         lastName: "lname4",
         email: "test@gmail.com",
@@ -185,8 +191,8 @@ describe('/api/auth/customers', function() {
       };
       let savedcustomer = await Customer.collection.insertMany([{...customer}]);
 
-      let res = await request(server).delete(`/api/auth/customers/${savedcustomer.ops[0]._id}`).set('x-auth-token', token);
-      expect(res.body.deletedCount).toBe(1);
+      let res = await request(server).delete(`/api/auth/customers/${savedcustomer.ops[0].customerId}`).set('x-auth-token', token);
+      expect(res.body.customerId).toBe(1);
     });
   })
 });
