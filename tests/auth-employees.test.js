@@ -104,7 +104,7 @@ describe('/api/auth/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "1",
+        storeId: 1,
         position: "manager"
       });
       expect(res.status).toBe(400);
@@ -114,7 +114,7 @@ describe('/api/auth/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
       let res = await request(server).post('/api/auth/employees').set('x-auth-token', token).send({...employee});
@@ -130,56 +130,61 @@ describe('/api/auth/employees', function() {
         storeId: "5f22e7c0f401da21084d739d",
         position: "manager"
       };
-      let res = await request(server).put(`/api/auth/employees/1234`).set('x-auth-token', token).send(employee);
+      let res = await request(server).put(`/api/auth/employees/123sdf4`).set('x-auth-token', token).send(employee);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
       let employee = {
         title: "employee9"
       };
-      let res = await request(server).put(`/api/auth/employees/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(employee);
+      let res = await request(server).put(`/api/auth/employees/1`).set('x-auth-token', token).send(employee);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
-      let res = await request(server).put(`/api/auth/employees/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(employee);
+      let res = await request(server).put(`/api/auth/employees/2`).set('x-auth-token', token).send(employee);
       expect(res.status).toBe(400);
     });
     it('should throw an error when store id is not valid', async () => {
       let employee = {
-        firstName: "Igor1",
+        employeeId: 1,
+        firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
       let savedEmployee = await Employee.collection.insertMany([{...employee}]);
 
-      let res = await request(server).put(`/api/auth/employees/${savedEmployee.ops[0]._id}`).set('x-auth-token', token).send({
-        firstName: "Igor1",
+      let res = await request(server).put(`/api/auth/employees/${savedEmployee.ops[0].employeeId}`).set('x-auth-token', token).send({
+        employeeId: 1,
+        firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "1",
+        storeId: 'ABC',
         position: "manager"
       });
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
       let employee = {
-        firstName: "Igor1",
+        employeeId: 1,
+        firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
       let savedemployee = await Employee.collection.insertMany([{...employee}]);
 
-      let res = await request(server).put(`/api/auth/employees/${savedemployee.ops[0]._id}`).set('x-auth-token', token).send({
-        firstName: "Igor2",
+      let res = await request(server).put(`/api/auth/employees/${savedemployee.ops[0].employeeId}`).set('x-auth-token', token).send({
+        employeeId: 1,
+        firstName: "Igor1",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       });
       expect(res.body.firstName).toEqual('Igor1');
@@ -188,24 +193,25 @@ describe('/api/auth/employees', function() {
 
   describe('DELETE one employee', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/auth/employees/1234').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/employees/12abc34').set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/auth/employees/5f2178c4b1ef5441280c2366').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/employees/2').set('x-auth-token', token);
       expect(res.status).toBe(400);
     });
     it('should delete one employee', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
       let savedemployee = await Employee.collection.insertMany([{...employee}]);
 
-      let res = await request(server).delete(`/api/auth/employees/${savedemployee.ops[0]._id}`).set('x-auth-token', token);
-      expect(res.body.deletedCount).toBe(1);
+      let res = await request(server).delete(`/api/auth/employees/${savedemployee.ops[0].employeeId}`).set('x-auth-token', token);
+      expect(res.body.employeeId).toBe(1);
     });
   })
 });
