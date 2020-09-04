@@ -13,7 +13,7 @@ const schema = Joi.object({
   employeeId: Joi.number().required(),
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
-  storeId: Joi.string().required(),
+  storeId: Joi.number().required(),
   position: Joi.string().required()
 }); //here we describe the schema of Joi
 

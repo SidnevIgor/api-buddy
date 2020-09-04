@@ -18,7 +18,7 @@ const schema = Joi.object({
   street: Joi.string().required(),
   building: Joi.string(),
   postcode: Joi.string().required(),
-  employees: Joi.array().items(Joi.string())
+  employees: Joi.array().items(Joi.number())
 }); //here we describe the schema of Joi
 
 module.exports.schema = schema;

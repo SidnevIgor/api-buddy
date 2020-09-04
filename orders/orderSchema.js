@@ -17,10 +17,10 @@ const Order = mongoose.model('Order', orderSchema);
 const schema = Joi.object({
   orderId: Joi.number().required(),
   date: Joi.date().required(),
-  employeeId: Joi.string().required(),
-  customerId: Joi.string().required(),
+  employeeId: Joi.number().required(),
+  customerId: Joi.number().required(),
   orderTotal: Joi.number().required(),
-  books: Joi.array().items()
+  books: Joi.array().items(Joi.number())
 }); //here we describe the schema of Joi
 
 module.exports.schema = schema;
