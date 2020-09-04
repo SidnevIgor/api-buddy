@@ -76,11 +76,11 @@ describe('/api/orders', function() {
 
   describe('GET one Order', () => {
     it('should throw an error when id is invalid', async () => {
-      let res = await request(server).get(`/api/auth/orders/1234`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/orders/12abc34`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when id is not found', async () => {
-      let res = await request(server).get(`/api/auth/orders/5f355ce806f38631fc33530d`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/orders/2`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should return one Order', async () => {
@@ -88,7 +88,7 @@ describe('/api/orders', function() {
         orderTotal: 100
       })
       let orderSaved = await order.save();
-      let res = await request(server).get(`/api/auth/orders/${orderSaved._id}`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/orders/${orderSaved.orderId}`).set('x-auth-token', token);
       expect(res.body.orderTotal).toEqual(orderSaved.orderTotal);
     });
   });
@@ -103,6 +103,7 @@ describe('/api/orders', function() {
     });
     it('should throw a 400 error as ID is not validated', async () => {
       let order = {
+        orderId: 1,
         date: "10.10.2020",
         employeeId: "1234",
         customerId: "5f22d957e986174428de4326",
@@ -114,11 +115,12 @@ describe('/api/orders', function() {
     });
     it('should post a Order', async () => {
       let order = {
+        orderId: 1,
         date: "10.10.2020",
-        employeeId: "5f22e022d99a4548a4b7ce7b",
-        customerId: "5f22d957e986174428de4326",
+        employeeId: 1,
+        customerId: 1,
         orderTotal: 1000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+        books: [1,2]
       };
       let res = await request(server).post('/api/auth/orders').set('x-auth-token', token).send({...order});
       expect(res.body.orderTotal).toEqual(order.orderTotal);
@@ -128,94 +130,101 @@ describe('/api/orders', function() {
   describe('PUT one Order', () => {
     it('should throw an error when id is invalid', async () => {
       let order = {
+        orderId: 1,
         date: "10.10.2020",
-        employeeId: "5f22e022d99a4548a4b7ce7b",
-        customerId: "5f22d957e986174428de4326",
+        employeeId: 1,
+        customerId: 1,
         orderTotal: 1000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+        books: [1,2]
       };
-      let res = await request(server).put(`/api/auth/orders/1234`).set('x-auth-token', token).send(order);
+      let res = await request(server).put(`/api/auth/orders/12abc34`).set('x-auth-token', token).send(order);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
       let order = {
         orderTotal: "Order9"
       };
-      let res = await request(server).put(`/api/auth/orders/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(order);
+      let res = await request(server).put(`/api/auth/orders/1`).set('x-auth-token', token).send(order);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
       let order = {
+        orderId: 1,
         date: "10.10.2020",
-        employeeId: "5f22e022d99a4548a4b7ce7b",
-        customerId: "5f22d957e986174428de4326",
+        employeeId: 1,
+        customerId: 1,
         orderTotal: 1000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+        books: [1,2]
       };
-      let res = await request(server).put(`/api/auth/orders/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(order);
+      let res = await request(server).put(`/api/auth/orders/2`).set('x-auth-token', token).send(order);
       expect(res.status).toBe(400);
     });
     it('should throw a 400 error', async () => {
       let order = {
+        orderId: 1,
         date: "10.10.2020",
-        employeeId: "5f22e022d99a4548a4b7ce7b",
-        customerId: "5f22d957e986174428de4326",
+        employeeId: 1,
+        customerId: 1,
         orderTotal: 1000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+        books: [1,2]
       };
       let savedOrder = await Order.collection.insertMany([{...order}]);
 
-      let res = await request(server).put(`/api/auth/orders/${savedOrder.ops[0]._id}`).set('x-auth-token', token).send({
-        date: "11.11.2020",
-        employeeId: "1234",
-        customerId: "5f22d957e986174428de4326",
-        orderTotal: 2000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+      let res = await request(server).put(`/api/auth/orders/${savedOrder.ops[0].orderId}`).set('x-auth-token', token).send({
+        da  orderId: 1,
+          date: "10.10.2020",
+          employeeId: 'abc',
+          customerId: 1,
+          orderTotal: 1000,
+          books: [1,2]
       });
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
       let order = {
+        orderId: 1,
         date: "10.10.2020",
-        employeeId: "5f22e022d99a4548a4b7ce7b",
-        customerId: "5f22d957e986174428de4326",
+        employeeId: 1,
+        customerId: 1,
         orderTotal: 1000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+        books: [1,2]
       };
       let savedOrder = await Order.collection.insertMany([{...order}]);
 
-      let res = await request(server).put(`/api/auth/orders/${savedOrder.ops[0]._id}`).set('x-auth-token', token).send({
-        date: "11.11.2020",
-        employeeId: "5f22e022d99a4548a4b7ce7b",
-        customerId: "5f22d957e986174428de4326",
-        orderTotal: 2000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+      let res = await request(server).put(`/api/auth/orders/${savedOrder.ops[0].orderId}`).set('x-auth-token', token).send({
+        orderId: 1,
+        date: "10.10.2020",
+        employeeId: 2,
+        customerId: 1,
+        orderTotal: 1000,
+        books: [1,2]
       });
-      expect(res.body.orderTotal).toEqual(1000);
+      expect(res.body.employeeId).toEqual(2);
     });
   });
 
   describe('DELETE one Order', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/auth/orders/1234').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/orders/1abc234').set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/auth/orders/5f2178c4b1ef5441280c2366').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/orders/2').set('x-auth-token', token);
       expect(res.status).toBe(400);
     });
     it('should delete one Order', async () => {
       let order = {
-        date: "11.11.2020",
-        employeeId: "5f22e022d99a4548a4b7ce7b",
-        customerId: "5f22d957e986174428de4326",
-        orderTotal: 2000,
-        books: ["5f2178c4b1ef5441280c2366","5f2178c4b1ef5441280c2366"]
+        orderId: 1,
+        date: "10.10.2020",
+        employeeId: 1,
+        customerId: 1,
+        orderTotal: 1000,
+        books: [1,2]
       };
       let savedOrder = await Order.collection.insertMany([{...order}]);
 
-      let res = await request(server).delete(`/api/auth/orders/${savedOrder.ops[0]._id}`).set('x-auth-token', token);
-      expect(res.body.deletedCount).toBe(1);
+      let res = await request(server).delete(`/api/auth/orders/${savedOrder.ops[0].orderId}`).set('x-auth-token', token);
+      expect(res.body.orderId).toBe(1);
     });
   })
 });
