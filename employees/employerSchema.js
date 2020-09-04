@@ -4,10 +4,7 @@ const employeeSchema = new mongoose.Schema({
   employeeId: Number,
   firstName: String,
   lastName: String,
-  storeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Store'
-  },
+  storeId: Number,
   position: String
 }, { versionKey: false });
 const Employee = mongoose.model('Employee', employeeSchema);

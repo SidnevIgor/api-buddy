@@ -7,8 +7,7 @@ const storeSchema = new mongoose.Schema({
   building: String,
   postcode: String,
   employees: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Employee'
+    type: Number
   }]
 }, { versionKey: false });
 const Store = mongoose.model('Store', storeSchema);

@@ -74,11 +74,11 @@ describe('/api/auth/employees', function() {
 
   describe('GET one employee', () => {
     it('should throw an error when id is invalid', async () => {
-      let res = await request(server).get(`/api/auth/employees/1234`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/employees/123dsfsd4`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when id is not found', async () => {
-      let res = await request(server).get(`/api/auth/employees/5f355ce806f38631fc33530d`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/employees/2`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should retun one employee', async () => {
@@ -86,7 +86,7 @@ describe('/api/auth/employees', function() {
         firstName: 't1'
       })
       let employeeSaved = await employee.save();
-      let res = await request(server).get(`/api/auth/employees/${employeeSaved._id}`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/employees/${employeeSaved.employeeId}`).set('x-auth-token', token);
       expect(res.status).toBe(200);
       expect(res.body.firstName).toMatch(employeeSaved.firstName);
     });
@@ -101,6 +101,7 @@ describe('/api/auth/employees', function() {
     });
     it('should return an error when storeId is not valid', async () => {
       let res = await request(server).post('/api/auth/employees').set('x-auth-token', token).send({
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "1",
@@ -110,6 +111,7 @@ describe('/api/auth/employees', function() {
     });
     it('should post a employee', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "5f22e7c0f401da21084d739d",

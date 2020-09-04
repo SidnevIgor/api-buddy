@@ -5,18 +5,11 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   orderId: Number,
   date: String,
-  employeeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Employee'
-  },
-  customerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Customer'
-  },
+  employeeId: Number,
+  customerId: Number,
   orderTotal: Number,
   books: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Book'
+    type: Number
   }]
 }, { versionKey: false });
 const Order = mongoose.model('Order', orderSchema);
