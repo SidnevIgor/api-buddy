@@ -88,7 +88,7 @@ describe('/api/auth/books', function() {
         title: 't1'
       })
       let bookSaved = await book.save();
-      let res = await request(server).get(`/api/auth/books/${bookSaved._id}`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/books/${bookSaved.bookId}`).set('x-auth-token', token);
       expect(res.body.title).toMatch(bookSaved.title);
     });
   });
@@ -103,6 +103,7 @@ describe('/api/auth/books', function() {
     });
     it('should post a book', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -118,6 +119,7 @@ describe('/api/auth/books', function() {
   describe('PUT one book', () => {
     it('should throw an error when id is invalid', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -125,18 +127,19 @@ describe('/api/auth/books', function() {
         issueDate: "2020",
         publisher: "Alpina"
       };
-      let res = await request(server).put(`/api/auth/books/1234`).set('x-auth-token', token).send(book);
+      let res = await request(server).put(`/api/auth/books/1234dfsd`).set('x-auth-token', token).send(book);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
       let book = {
         title: "book9"
       };
-      let res = await request(server).put(`/api/auth/books/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(book);
+      let res = await request(server).put(`/api/auth/books/1`).set('x-auth-token', token).send(book);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -144,11 +147,12 @@ describe('/api/auth/books', function() {
         issueDate: "2020",
         publisher: "Alpina"
       };
-      let res = await request(server).put(`/api/auth/books/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(book);
+      let res = await request(server).put(`/api/auth/books/2`).set('x-auth-token', token).send(book);
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -158,7 +162,8 @@ describe('/api/auth/books', function() {
       };
       let savedBook = await Book.collection.insertMany([{...book}]);
 
-      let res = await request(server).put(`/api/auth/books/${savedBook.ops[0]._id}`).set('x-auth-token', token).send({
+      let res = await request(server).put(`/api/auth/books/${savedBook.ops[0].bookId}`).set('x-auth-token', token).send({
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -172,15 +177,16 @@ describe('/api/auth/books', function() {
 
   describe('DELETE one book', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/auth/books/1234').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/books/123hjgh4').set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/auth/books/5f2178c4b1ef5441280c2366').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/books/2').set('x-auth-token', token);
       expect(res.status).toBe(400);
     });
     it('should delete one book', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -190,8 +196,8 @@ describe('/api/auth/books', function() {
       };
       let savedBook = await Book.collection.insertMany([{...book}]);
 
-      let res = await request(server).delete(`/api/auth/books/${savedBook.ops[0]._id}`).set('x-auth-token', token);
-      expect(res.body.deletedCount).toBe(1);
+      let res = await request(server).delete(`/api/auth/books/${savedBook.ops[0].bookId}`).set('x-auth-token', token);
+      expect(res.body.price).toBe(100);
     });
   })
 });
