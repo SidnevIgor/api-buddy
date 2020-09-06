@@ -54,6 +54,7 @@ describe('/api/employees', function() {
     });
     it('should retun one employee', async () => {
       let employee = new Employee({
+        employeeId: 1,
         firstName: 't1'
       })
       let employeeSaved = await employee.save();
@@ -74,7 +75,7 @@ describe('/api/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "1",
+        storeId: "1abc",
         position: "manager"
       });
       expect(res.status).toBe(400);
@@ -84,7 +85,7 @@ describe('/api/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
       let res = await request(server).post('/api/employees').send({...employee});
@@ -135,7 +136,7 @@ describe('/api/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "1",
+        storeId: "1abc",
         position: "manager"
       });
       expect(res.status).toBe(400);
@@ -145,7 +146,7 @@ describe('/api/employees', function() {
         employeeId: 1,
         firstName: "Igor1",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
       let savedEmployee = await Employee.collection.insertMany([{...employee}]);
@@ -154,7 +155,7 @@ describe('/api/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       });
       expect(res.body.firstName).toEqual('Igor2');
@@ -175,7 +176,7 @@ describe('/api/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "1",
+        storeId: 1,
         position: "manager"
       };
       let savedemployee = await Employee.collection.insertMany([{...сustomer}]);

@@ -179,7 +179,7 @@ describe('/api/orders', function() {
       let savedOrder = await Order.collection.insertMany([{...order}]);
 
       let res = await request(server).put(`/api/auth/orders/${savedOrder.ops[0].orderId}`).set('x-auth-token', token).send({
-        da  orderId: 1,
+          orderId: 1,
           date: "10.10.2020",
           employeeId: 'abc',
           customerId: 1,
