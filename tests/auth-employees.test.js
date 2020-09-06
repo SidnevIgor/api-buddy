@@ -11,10 +11,11 @@ describe('/api/auth/employees', function() {
       server = require('../index');
     }
     employee = new Employee({
-      firstName: "name5",
-      lastName: "lname4",
-      email: "test@gmail.com",
-      tel: "123-456-789"
+      employeeId: 1,
+      firstName: "Igor2",
+      lastName: "Sidnev",
+      storeId: 1,
+      position: "manager"
     });
     result = await employee.save();
     token = jwt.sign({_id: result._id}, config.get('secret'));
@@ -127,7 +128,7 @@ describe('/api/auth/employees', function() {
       let employee = {
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
       let res = await request(server).put(`/api/auth/employees/123sdf4`).set('x-auth-token', token).send(employee);

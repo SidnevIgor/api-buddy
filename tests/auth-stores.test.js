@@ -15,12 +15,13 @@ describe('/api/auth/stores', function() {
     employee = new Employee({
       firstName: "Igor2",
       lastName: "Sidnev",
-      storeId: "5f355ce806f38631fc33530d",
+      storeId: 1,
       position: "manager"
     });
     employee = await employee.save();
 
     customer = new Customer({
+      customerId: 1,
       firstName: "name5",
       lastName: "lname4",
       email: "test@gmail.com",

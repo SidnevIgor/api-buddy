@@ -11,6 +11,7 @@ describe('/api/auth/customers', function() {
       server = require('../index');
     }
     customer = new Customer({
+      customerId: 1,
       firstName: "name5",
       lastName: "lname4",
       email: "test@gmail.com",

@@ -2,7 +2,7 @@ const request = require('supertest');
 const config = require('config'); //this is used to store hidden server variables
 const jwt = require('jsonwebtoken');
 
-let server, employee, result, token;
+let server, employee, result, token, customer;
 const { Order } = require('../orders/orderschema');
 const { Employee } = require('../employees/employees');
 
@@ -12,12 +12,20 @@ describe('/api/orders', function() {
       server = require('../index');
     }
     employee = new Employee({
+      employeeId: 1,
+      firstName: "Igor2",
+      lastName: "Sidnev",
+      storeId: 1,
+      position: "manager"
+    });
+    customer = new Customer({
+      customerId: 1,
       firstName: "name5",
       lastName: "lname4",
       email: "test@gmail.com",
       tel: "123-456-789"
     });
-    result = await employee.save();
+    let result = await customer.save();
     token = jwt.sign({_id: result._id}, config.get('secret'));
   });
   afterEach(async () => {
