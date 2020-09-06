@@ -45,11 +45,11 @@ describe('/api/customers', function() {
 
   describe('GET one Customer', () => {
     it('should throw an error when id is invalid', async () => {
-      let res = await request(server).get(`/api/customers/1234`);
+      let res = await request(server).get(`/api/customers/abc1234`);
       expect(res.status).toBe(404);
     });
     it('should throw an error when id is not found', async () => {
-      let res = await request(server).get(`/api/customers/5f355ce806f38631fc33530d`);
+      let res = await request(server).get(`/api/customers/2`);
       expect(res.status).toBe(404);
     });
     it('should retun one Customer', async () => {
@@ -57,7 +57,7 @@ describe('/api/customers', function() {
         firstName: 't1'
       })
       let customersaved = await customer.save();
-      let res = await request(server).get(`/api/customers/${customersaved._id}`);
+      let res = await request(server).get(`/api/customers/${customersaved.customerId}`);
       expect(res.body.firstName).toMatch(customersaved.firstName);
     });
   });
@@ -71,11 +71,12 @@ describe('/api/customers', function() {
     });
     it('should post a Customer', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
         tel: "123-456-789",
-        password: "1234"
+        password: "abc1234"
       };
       let res = await request(server).post('/api/auth').send({...customer});
       expect(res.body.firstName).toMatch(customer.firstName);
@@ -85,75 +86,80 @@ describe('/api/customers', function() {
   describe('PUT one Customer', () => {
     it('should throw an error when id is invalid', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
         tel: "123-456-789",
-        password: "1234"
+        password: "abc1234"
       };
-      let res = await request(server).put(`/api/customers/1234`).send(customer);
+      let res = await request(server).put(`/api/customers/abc1234`).send(customer);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
       let customer = {
         title: "Customer9"
       };
-      let res = await request(server).put(`/api/customers/5f2178c4b1ef5441280c2366`).send(customer);
+      let res = await request(server).put(`/api/customers/2`).send(customer);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
         tel: "123-456-789",
-        password: "1234"
+        password: "abc1234"
       };
-      let res = await request(server).put(`/api/customers/5f2178c4b1ef5441280c2366`).send(customer);
+      let res = await request(server).put(`/api/customers/2`).send(customer);
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
       let customer = {
+        customerId: 1,
         firstName: "name5",
         lastName: "lname4",
         email: "test@gmail.com",
         tel: "123-456-789",
-        password: "1234"
+        password: "abc1234"
       };
       let savedCustomer = await Customer.collection.insertMany([{...customer}]);
 
-      let res = await request(server).put(`/api/customers/${savedCustomer.ops[0]._id}`).send({
+      let res = await request(server).put(`/api/customers/${savedCustomer.ops[0].customerId}`).send({
+        customerId: 1,
         firstName: "name6",
         lastName: "lname6",
         email: "test@gmail.com",
         tel: "123-456-789",
-        password: "1234"
+        password: "abc1234"
       });
-      expect(res.body.firstName).toEqual('name5');
+      expect(res.body.firstName).toEqual('name6');
     });
   });
 
   describe('DELETE one Customer', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/customers/1234');
+      let res = await request(server).delete('/api/customers/abc1234');
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/customers/5f2178c4b1ef5441280c2344');
+      let res = await request(server).delete('/api/customers/2');
       expect(res.status).toBe(400);
     });
     it('should delete one Customer', async () => {
       let сustomer = {
+        customerId: 1,
         firstName: "name6",
         lastName: "lname6",
         email: "test@gmail.com",
         tel: "123-456-789",
-        password: "1234"
+        password: "abc1234"
       };
       let savedCustomer = await Customer.collection.insertMany([{...сustomer}]);
 
-      let res = await request(server).delete(`/api/customers/${savedCustomer.ops[0]._id}`);
-      expect(res.body.deletedCount).toBe(1);
+      let res = await request(server).delete(`/api/customers/${savedCustomer.ops[0].customerId}`);
+      expect(res.body.customerId).toBe(1);
     });
   })
 });
