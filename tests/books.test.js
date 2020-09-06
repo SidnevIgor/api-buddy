@@ -47,19 +47,20 @@ describe('/api/books', function() {
 
   describe('GET one book', () => {
     it('should throw an error when id is invalid', async () => {
-      let res = await request(server).get(`/api/books/1234`);
+      let res = await request(server).get(`/api/books/abc1234`);
       expect(res.status).toBe(404);
     });
     it('should throw an error when id is not found', async () => {
-      let res = await request(server).get(`/api/books/5f355ce806f38631fc33530d`);
+      let res = await request(server).get(`/api/books/2`);
       expect(res.status).toBe(404);
     });
     it('should retun one book', async () => {
       let book = new Book({
+        bookId: 1,
         title: 't1'
       })
       let bookSaved = await book.save();
-      let res = await request(server).get(`/api/books/${bookSaved._id}`);
+      let res = await request(server).get(`/api/books/${bookSaved.bookId}`);
       expect(res.body.title).toMatch(bookSaved.title);
     });
   });
@@ -74,6 +75,7 @@ describe('/api/books', function() {
     });
     it('should post a book', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -89,6 +91,7 @@ describe('/api/books', function() {
   describe('PUT one book', () => {
     it('should throw an error when id is invalid', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -96,18 +99,19 @@ describe('/api/books', function() {
         issueDate: "2020",
         publisher: "Alpina"
       };
-      let res = await request(server).put(`/api/books/1234`).send(book);
+      let res = await request(server).put(`/api/books/abc1234`).send(book);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
       let book = {
         title: "book9"
       };
-      let res = await request(server).put(`/api/books/5f2178c4b1ef5441280c2366`).send(book);
+      let res = await request(server).put(`/api/books/1`).send(book);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -115,11 +119,12 @@ describe('/api/books', function() {
         issueDate: "2020",
         publisher: "Alpina"
       };
-      let res = await request(server).put(`/api/books/5f2178c4b1ef5441280c2366`).send(book);
+      let res = await request(server).put(`/api/books/2`).send(book);
       expect(res.status).toBe(400);
     });
     it('should put an object in db', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -129,7 +134,8 @@ describe('/api/books', function() {
       };
       let savedBook = await Book.collection.insertMany([{...book}]);
 
-      let res = await request(server).put(`/api/books/${savedBook.ops[0]._id}`).send({
+      let res = await request(server).put(`/api/books/${savedBook.ops[0].bookId}`).send({
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -137,21 +143,22 @@ describe('/api/books', function() {
         issueDate: "2020",
         publisher: "Alpina"
       });
-      expect(res.body.price).toEqual(100);
+      expect(res.body.price).toEqual(300);
     });
   });
 
   describe('DELETE one book', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/books/1234');
+      let res = await request(server).delete('/api/books/abc1234');
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/books/5f2178c4b1ef5441280c2366');
+      let res = await request(server).delete('/api/books/2');
       expect(res.status).toBe(400);
     });
     it('should delete one book', async () => {
       let book = {
+        bookId: 1,
         title: "book9",
         author: "Leo Tolstoy",
         genre: "Romance",
@@ -161,7 +168,7 @@ describe('/api/books', function() {
       };
       let savedBook = await Book.collection.insertMany([{...book}]);
 
-      let res = await request(server).delete(`/api/books/${savedBook.ops[0]._id}`);
+      let res = await request(server).delete(`/api/books/${savedBook.ops[0].bookId}`);
       expect(res.body.deletedCount).toBe(1);
     });
   })
