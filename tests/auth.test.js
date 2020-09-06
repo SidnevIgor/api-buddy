@@ -10,6 +10,7 @@ describe('Testing auth validation', () => {
       server = require('../index');
     }
     customer = {
+      customerId: 1,
       firstName: 'Igor',
       lastName: 'Sidnev',
       email: 'test@gmail.com',
