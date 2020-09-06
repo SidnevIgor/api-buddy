@@ -45,11 +45,11 @@ describe('/api/employees', function() {
 
   describe('GET one employee', () => {
     it('should throw an error when id is invalid', async () => {
-      let res = await request(server).get(`/api/employees/1234`);
+      let res = await request(server).get(`/api/employees/abc1234`);
       expect(res.status).toBe(404);
     });
     it('should throw an error when id is not found', async () => {
-      let res = await request(server).get(`/api/employees/5f355ce806f38631fc33530d`);
+      let res = await request(server).get(`/api/employees/2`);
       expect(res.status).toBe(404);
     });
     it('should retun one employee', async () => {
@@ -57,7 +57,7 @@ describe('/api/employees', function() {
         firstName: 't1'
       })
       let employeeSaved = await employee.save();
-      let res = await request(server).get(`/api/employees/${employeeSaved._id}`);
+      let res = await request(server).get(`/api/employees/${employeeSaved.employeeId}`);
       expect(res.body.firstName).toMatch(employeeSaved.firstName);
     });
   });
@@ -71,6 +71,7 @@ describe('/api/employees', function() {
     });
     it('should return an error when storeId is not valid', async () => {
       let res = await request(server).post('/api/employees').send({
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "1",
@@ -80,6 +81,7 @@ describe('/api/employees', function() {
     });
     it('should post a employee', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "5f22e7c0f401da21084d739d",
@@ -93,19 +95,20 @@ describe('/api/employees', function() {
   describe('PUT one employee', () => {
     it('should throw an error when id is invalid', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "5f22e7c0f401da21084d739d",
         position: "manager"
       };
-      let res = await request(server).put(`/api/employees/1234`).send(employee);
+      let res = await request(server).put(`/api/employees/abc1234`).send(employee);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
       let employee = {
         title: "employee9"
       };
-      let res = await request(server).put(`/api/employees/5f2178c4b1ef5441280c2366`).send(employee);
+      let res = await request(server).put(`/api/employees/1`).send(employee);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
@@ -115,11 +118,12 @@ describe('/api/employees', function() {
         storeId: "5f22e7c0f401da21084d739d",
         position: "manager"
       };
-      let res = await request(server).put(`/api/employees/5f2178c4b1ef5441280c2366`).send(employee);
+      let res = await request(server).put(`/api/employees/2`).send(employee);
       expect(res.status).toBe(400);
     });
     it('should throw an error when store id is not valid', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor1",
         lastName: "Sidnev",
         storeId: "5f22e7c0f401da21084d739d",
@@ -127,7 +131,8 @@ describe('/api/employees', function() {
       };
       let savedEmployee = await Employee.collection.insertMany([{...employee}]);
 
-      let res = await request(server).put(`/api/employees/${savedEmployee.ops[0]._id}`).send({
+      let res = await request(server).put(`/api/employees/${savedEmployee.ops[0].employeeId}`).send({
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "1",
@@ -137,6 +142,7 @@ describe('/api/employees', function() {
     });
     it('should put an object in db', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor1",
         lastName: "Sidnev",
         storeId: "5f22e7c0f401da21084d739d",
@@ -144,27 +150,29 @@ describe('/api/employees', function() {
       };
       let savedEmployee = await Employee.collection.insertMany([{...employee}]);
 
-      let res = await request(server).put(`/api/employees/${savedEmployee.ops[0]._id}`).send({
+      let res = await request(server).put(`/api/employees/${savedEmployee.ops[0].employeeId}`).send({
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "5f22e7c0f401da21084d739d",
         position: "manager"
       });
-      expect(res.body.firstName).toEqual('Igor1');
+      expect(res.body.firstName).toEqual('Igor2');
     });
   });
 
   describe('DELETE one employee', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/employees/1234');
+      let res = await request(server).delete('/api/employees/abc1234');
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/employees/5f2178c4b1ef5441280c2344');
+      let res = await request(server).delete('/api/employees/2');
       expect(res.status).toBe(400);
     });
     it('should delete one employee', async () => {
       let сustomer = {
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
         storeId: "1",
@@ -172,8 +180,8 @@ describe('/api/employees', function() {
       };
       let savedemployee = await Employee.collection.insertMany([{...сustomer}]);
 
-      let res = await request(server).delete(`/api/employees/${savedemployee.ops[0]._id}`);
-      expect(res.body.deletedCount).toBe(1);
+      let res = await request(server).delete(`/api/employees/${savedemployee.ops[0].employeeId}`);
+      expect(res.body.employeedId).toBe(1);
     });
   })
 });
