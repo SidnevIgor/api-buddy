@@ -86,11 +86,11 @@ describe('/api/auth/stores', function() {
 
   describe('GET one Store', () => {
     it('should throw an error when id is invalid', async () => {
-      let res = await request(server).get(`/api/auth/stores/1234`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/stores/1abc234`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when id is not found', async () => {
-      let res = await request(server).get(`/api/auth/stores/5f355ce806f38631fc33530d`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/stores/2`).set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should retun one Store', async () => {
@@ -98,7 +98,7 @@ describe('/api/auth/stores', function() {
         city: 't1'
       })
       let storeSaved = await store.save();
-      let res = await request(server).get(`/api/auth/stores/${storeSaved._id}`).set('x-auth-token', token);
+      let res = await request(server).get(`/api/auth/stores/${storeSaved.storeId}`).set('x-auth-token', token);
       expect(res.body.city).toMatch(storeSaved.city);
     });
   });
@@ -113,6 +113,7 @@ describe('/api/auth/stores', function() {
     });
     it('should return 400 error', async () => {
       let store = {
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '6',
@@ -124,11 +125,12 @@ describe('/api/auth/stores', function() {
     });
     it('should post a Store', async () => {
       let store = {
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
-        employees: [employee._id]
+        employees: [1]
       };
       let res = await request(server).post('/api/auth/stores').set('x-auth-token', token).send({...store});
       expect(res.body.city).toMatch(store.city);
@@ -138,13 +140,14 @@ describe('/api/auth/stores', function() {
   describe('PUT one Store', () => {
     it('should throw an error when id is invalid', async () => {
       let store = {
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
         employees: [employee._id]
       };
-      let res = await request(server).put(`/api/auth/stores/1234`).set('x-auth-token', token).send(store);
+      let res = await request(server).put(`/api/auth/stores/12abc34`).set('x-auth-token', token).send(store);
       expect(res.status).toBe(404);
     });
     it('should throw an error when validation is not passed', async () => {
@@ -156,17 +159,19 @@ describe('/api/auth/stores', function() {
     });
     it('should throw an error when id is not found', async () => {
       let store = {
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
         employees: [employee._id]
       };
-      let res = await request(server).put(`/api/auth/stores/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(store);
+      let res = await request(server).put(`/api/auth/stores/2`).set('x-auth-token', token).send(store);
       expect(res.status).toBe(400);
     });
     it('should throw 400 error', async () => {
       let store = {
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '6',
@@ -175,7 +180,8 @@ describe('/api/auth/stores', function() {
       };
       let savedStore = await Store.collection.insertMany([{...store}]);
 
-      let res = await request(server).put(`/api/auth/stores/${savedStore.ops[0]._id}`).set('x-auth-token', token).send({
+      let res = await request(server).put(`/api/auth/stores/${savedStore.ops[0].storeId}`).set('x-auth-token', token).send({
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '7',
@@ -186,46 +192,49 @@ describe('/api/auth/stores', function() {
     });
     it('should put an object in db', async () => {
       let store = {
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
-        employees: [employee._id]
+        employees: [1]
       };
       let savedStore = await Store.collection.insertMany([{...store}]);
 
-      let res = await request(server).put(`/api/auth/stores/${savedStore.ops[0]._id}`).set('x-auth-token', token).send({
+      let res = await request(server).put(`/api/auth/stores/${savedStore.ops[0].storeId}`).set('x-auth-token', token).send({
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
-        building: '7',
+        building: '8',
         postcode: '107497',
-        employees: [employee._id]
+        employees: [1]
       });
-      expect(res.body.building).toEqual('6');
+      expect(res.body.building).toEqual('8');
     });
   });
 
   describe('DELETE one Store', () => {
     it('should throw an error when ID validation is not passed', async () => {
-      let res = await request(server).delete('/api/auth/stores/1234').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/stores/1abc234').set('x-auth-token', token);
       expect(res.status).toBe(404);
     });
     it('should throw an error when ID is not found', async () => {
-      let res = await request(server).delete('/api/auth/stores/5f2178c4b1ef5441280c2366').set('x-auth-token', token);
+      let res = await request(server).delete('/api/auth/stores/2').set('x-auth-token', token);
       expect(res.status).toBe(400);
     });
     it('should delete one Store', async () => {
       let store = {
+        storeId: 1,
         city: 'Moscow',
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
-        employees: [employee._id]
+        employees: [1]
       };
       let savedStore = await Store.collection.insertMany([{...store}]);
 
-      let res = await request(server).delete(`/api/auth/stores/${savedStore.ops[0]._id}`).set('x-auth-token', token);
-      expect(res.body.deletedCount).toBe(1);
+      let res = await request(server).delete(`/api/auth/stores/${savedStore.ops[0].storeId}`).set('x-auth-token', token);
+      expect(res.body.storeId).toBe(1);
     });
   })
 });
