@@ -7,7 +7,7 @@ const { Store } = require('../stores/storeSchema');
 const { Employee } = require('../employees/employerSchema');
 const { Customer } = require('../customers/customerSchema');
 
-describe('/api/auth/stores', function() {
+describe.skip('/api/auth/stores', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');

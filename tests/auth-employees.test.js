@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 let server, employee, token, result;
 const { Employee } = require('../employees/employees');
 
-describe('/api/auth/employees', function() {
+describe.skip('/api/auth/employees', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');

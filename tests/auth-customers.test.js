@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 let server, customer, token, result;
 const { Customer } = require('../customers/customers');
 
-describe('/api/auth/customers', function() {
+describe.skip('/api/auth/customers', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');

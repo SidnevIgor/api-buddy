@@ -6,7 +6,7 @@ let server, employee, result, token, customer;
 const { Order } = require('../orders/orderschema');
 const { Employee } = require('../employees/employees');
 
-describe('/api/orders', function() {
+describe.skip('/api/orders', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
