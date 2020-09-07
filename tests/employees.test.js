@@ -2,7 +2,7 @@ const request = require('supertest');
 let server;
 const { Employee } = require('../employees/employees');
 
-describe.skip('/api/employees', function() {
+describe('/api/employees', function() {
   beforeEach(() => {
     if(!server) {
       server = require('../index');
@@ -179,10 +179,11 @@ describe.skip('/api/employees', function() {
         storeId: 1,
         position: "manager"
       };
-      let savedemployee = await Employee.collection.insertMany([{...сustomer}]);
-
-      let res = await request(server).delete(`/api/employees/${savedemployee.ops[0].employeeId}`);
-      expect(res.body.employeedId).toBe(1);
+      let savedEmployee = await Employee.collection.insertMany([{...сustomer}]);
+      console.log('The employee for deletion is ', savedEmployee);
+      let res = await request(server).delete(`/api/employees/${savedEmployee.ops[0].employeeId}`);
+      console.log('The result of deletion is ', res.body);
+      expect(res.body.employeeId).toBe(1);
     });
   })
 });
