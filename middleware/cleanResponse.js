@@ -9,7 +9,6 @@ module.exports = function(obj) {
     return arr;
   }
   else {
-    console.log(obj);
     let ob = { ...obj._doc };
     delete ob._id;
     return ob;

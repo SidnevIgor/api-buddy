@@ -57,11 +57,16 @@ describe('/api/books', function() {
     it('should retun one book', async () => {
       let book = new Book({
         bookId: 1,
-        title: 't1'
+        title: "book9",
+        author: "Leo Tolstoy",
+        genre: "Romance",
+        price: 100,
+        issueDate: "2020",
+        publisher: "Alpina"
       })
       let bookSaved = await book.save();
       let res = await request(server).get(`/api/books/${bookSaved.bookId}`);
-      expect(res.body.title).toMatch(bookSaved.title);
+      expect(res.body[0].title).toMatch(bookSaved.title);
     });
   });
 
@@ -167,9 +172,8 @@ describe('/api/books', function() {
         publisher: "Alpina"
       };
       let savedBook = await Book.collection.insertMany([{...book}]);
-
       let res = await request(server).delete(`/api/books/${savedBook.ops[0].bookId}`);
-      expect(res.body.deletedCount).toBe(1);
+      expect(res.body[0].bookId).toBe(1);
     });
   })
 });
