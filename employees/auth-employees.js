@@ -20,7 +20,7 @@ router.get('/', auth, async (req, res) => {
 });
 router.get('/:id', auth, validateId, async (req, res) => {
   let employee = await Employee.find({employeeId: req.params.id});
-  if(!employee) return res.status(404).send('There is no employee with such id');
+  if(employee.length === 0) return res.status(404).send('There is no employee with such id');
   return res.send(cleanResponse(employee));
 });
 
@@ -47,7 +47,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
   try {
     //let employee = await Employee.findOneAndUpdate({ "employeeId": req.params.id }, {...req.body});
     let employee = await Employee.find({ "employeeId": req.params.id });
-    if(!employee) {
+    if(employee.length === 0) {
       return res.status(400).send('There is no employee with a chosen id');
     }
     return res.send(req.body);
@@ -60,7 +60,7 @@ router.put('/:id', auth, validateId, async (req, res) => {
 router.delete('/:id', auth, validateId, async (req, res) => {
   //let employee = await Employee.deleteOne({"employeeId": req.params.id});
   let employee = await Employee.find({ "employeeId": req.params.id });
-  if(!employee) {
+  if(employee.length === 0) {
     return res.status(400).send('There is no employee with a chosen id');
   }
   return res.send(employee);
