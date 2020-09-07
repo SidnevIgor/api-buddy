@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 });
 router.get('/:id', validateId, async (req, res) => {
   let order = await Order.find({orderId: req.params.id});
-  if(!order) return res.status(404).send('There is no order with such id');
+  if(order.length === 0) return res.status(404).send('There is no order with such id');
   return res.send(cleanResponse(order));
 });
 
@@ -44,7 +44,7 @@ router.put('/:id', validateId, async (req, res) => {
   try {
     //let order = await Order.findOneAndUpdate({ "orderId": req.params.id }, { ...req.body });
     let order = await Order.find({ "orderId": req.params.id });
-    if(!order) {
+    if(order.length === 0) {
       return res.status(400).send('There is no order with a chosen id');
     }
     return res.send(req.body);
@@ -57,7 +57,7 @@ router.put('/:id', validateId, async (req, res) => {
 router.delete('/:id', validateId, async (req, res) => {
   //let order = await Order.deleteOne({"orderId": req.params.id});
   let order = await Order.find({ "orderId": req.params.id });
-  if(!order) {
+  if(order.length === 0) {
     return res.status(400).send('There is no order with a chosen id');
   }
   return res.send(order);
