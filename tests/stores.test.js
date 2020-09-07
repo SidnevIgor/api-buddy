@@ -3,7 +3,7 @@ let server, employee;
 const { Store } = require('../stores/storeSchema');
 const { Employee } = require('../employees/employerSchema');
 
-describe.skip('/api/stores', function() {
+describe('/api/stores', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
@@ -11,7 +11,7 @@ describe.skip('/api/stores', function() {
     employee = new Employee({
       firstName: "Igor2",
       lastName: "Sidnev",
-      storeId: "5f355ce806f38631fc33530d",
+      storeId: 1,
       position: "manager"
     });
     employee = await employee.save();
