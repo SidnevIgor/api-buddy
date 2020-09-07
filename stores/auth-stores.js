@@ -19,8 +19,8 @@ router.get('/', auth, async (req, res) => {
   return res.send(cleanResponse(stores));
 });
 router.get('/:id', auth, validateId, async (req, res) => {
-  let store = await Store.find({storeId: req.params.id});
-  if(store.length === 0) return res.status(404).send('There is no store with such id');
+  let store = await Store.findOne({storeId: req.params.id});
+  if(!store) return res.status(404).send('There is no store with such id');
   return res.send(cleanResponse(store));
 });
 
@@ -47,8 +47,8 @@ router.put('/:id', auth, validateId, async (req, res) => {
 
   try {
     //let store = await Store.findOneAndUpdate({ "storeId": req.params.id }, { ...req.body });
-    let store = await Store.find({ "storeId": req.params.id });
-    if(store.length === 0) {
+    let store = await Store.findOne({ "storeId": req.params.id });
+    if(!store) {
       return res.status(400).send('There is no store with a chosen id');
     }
     return res.send(req.body);
@@ -60,8 +60,8 @@ router.put('/:id', auth, validateId, async (req, res) => {
 
 router.delete('/:id', auth, validateId, async (req, res) => {
   //let store = await Store.deleteOne({"storeId": req.params.id});
-  let store = await Store.find({ "storeId": req.params.id });
-  if(store.length === 0) {
+  let store = await Store.findOne({ "storeId": req.params.id });
+  if(!store) {
     return res.status(400).send('There is no store with a chosen id');
   }
   return res.send(store);
