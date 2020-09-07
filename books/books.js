@@ -18,8 +18,8 @@ router.get('/', async (req, res) => {
   return res.send(cleanResponse(books));
 });
 router.get('/:id', validateId, async (req, res) => {
-  let book = await Book.find({ bookId: req.params.id });
-  if(book.length === 0) return res.status(404).send('There is no book with such id');
+  let book = await Book.findOne({ bookId: req.params.id });
+  if(!book) return res.status(404).send('There is no book with such id');
   return res.send(cleanResponse(book));
 });
 
@@ -38,8 +38,8 @@ router.put('/:id', validateId, async (req, res) => {
     return res.status(400).send(validation.error);
   }
   //let book = await Book.findOneAndUpdate({"bookId":req.params.id}, {...req.body});
-  let book = await Book.find({"bookId":req.params.id});
-  if(book.length === 0) {
+  let book = await Book.findOne({"bookId":req.params.id});
+  if(!book) {
     return res.status(400).send('There is no book with a chosen id');
   }
   return res.send(req.body);
@@ -47,8 +47,8 @@ router.put('/:id', validateId, async (req, res) => {
 
 router.delete('/:id', validateId, async (req, res) => {
   //let book = await Book.deleteOne({"bookId": req.params.id});
-  let book = await Book.find({"bookId":req.params.id});
-  if(book.length === 0) {
+  let book = await Book.findOne({"bookId":req.params.id});
+  if(!book) {
     return res.status(400).send('There is no book with a chosen id');
   }
   return res.send(book);

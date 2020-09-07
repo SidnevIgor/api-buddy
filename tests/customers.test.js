@@ -58,7 +58,7 @@ describe.skip('/api/customers', function() {
       })
       let customersaved = await customer.save();
       let res = await request(server).get(`/api/customers/${customersaved.customerId}`);
-      expect(res.body.firstName).toMatch(customersaved.firstName);
+      expect(res.body[0].firstName).toMatch(customersaved.firstName);
     });
   });
 
