@@ -2,7 +2,7 @@ const request = require('supertest');
 let server;
 const { Customer } = require('../customers/customers');
 
-describe('/api/customers', function() {
+describe.skip('/api/customers', function() {
   beforeEach(() => {
     if(!server) {
       server = require('../index');

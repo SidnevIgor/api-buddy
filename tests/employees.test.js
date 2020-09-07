@@ -2,7 +2,7 @@ const request = require('supertest');
 let server;
 const { Employee } = require('../employees/employees');
 
-describe('/api/employees', function() {
+describe.skip('/api/employees', function() {
   beforeEach(() => {
     if(!server) {
       server = require('../index');
