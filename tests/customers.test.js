@@ -2,7 +2,7 @@ const request = require('supertest');
 let server;
 const { Customer } = require('../customers/customers');
 
-describe.skip('/api/customers', function() {
+describe('/api/customers', function() {
   beforeEach(() => {
     if(!server) {
       server = require('../index');
@@ -54,11 +54,12 @@ describe.skip('/api/customers', function() {
     });
     it('should retun one Customer', async () => {
       let customer = new Customer({
+        customerId: 1,
         firstName: 't1'
       })
       let customersaved = await customer.save();
       let res = await request(server).get(`/api/customers/${customersaved.customerId}`);
-      expect(res.body[0].firstName).toMatch(customersaved.firstName);
+      expect(res.body.firstName).toMatch(customersaved.firstName);
     });
   });
 

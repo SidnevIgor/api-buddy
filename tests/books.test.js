@@ -66,7 +66,7 @@ describe('/api/books', function() {
       })
       let bookSaved = await book.save();
       let res = await request(server).get(`/api/books/${bookSaved.bookId}`);
-      expect(res.body[0].title).toMatch(bookSaved.title);
+      expect(res.body.title).toMatch(bookSaved.title);
     });
   });
 
@@ -173,7 +173,7 @@ describe('/api/books', function() {
       };
       let savedBook = await Book.collection.insertMany([{...book}]);
       let res = await request(server).delete(`/api/books/${savedBook.ops[0].bookId}`);
-      expect(res.body[0].bookId).toBe(1);
+      expect(res.body.bookId).toBe(1);
     });
   })
 });
