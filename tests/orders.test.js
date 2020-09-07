@@ -2,7 +2,7 @@ const request = require('supertest');
 let server;
 const { Order } = require('../orders/orderschema');
 
-describe.skip('/api/orders', function() {
+describe('/api/orders', function() {
   beforeEach(() => {
     if(!server) {
       server = require('../index');
@@ -146,7 +146,7 @@ describe.skip('/api/orders', function() {
         employeeId: 1,
         customerId: 1,
         orderTotal: 1000,
-        books: [1,'2']
+        books: [1,'2abc']
       });
       expect(res.status).toBe(400);
     });

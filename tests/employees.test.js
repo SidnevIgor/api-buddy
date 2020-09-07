@@ -180,9 +180,7 @@ describe('/api/employees', function() {
         position: "manager"
       };
       let savedEmployee = await Employee.collection.insertMany([{...сustomer}]);
-      console.log('The employee for deletion is ', savedEmployee);
       let res = await request(server).delete(`/api/employees/${savedEmployee.ops[0].employeeId}`);
-      console.log('The result of deletion is ', res.body);
       expect(res.body.employeeId).toBe(1);
     });
   })
