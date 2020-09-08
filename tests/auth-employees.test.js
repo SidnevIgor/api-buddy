@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken');
 let server, employee, token, result;
 const { Employee } = require('../employees/employees');
 
-describe.skip('/api/auth/employees', function() {
+describe('/api/auth/employees', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
     }
     employee = new Employee({
-      employeeId: 1,
+      employeeId: 20,
       firstName: "Igor2",
       lastName: "Sidnev",
       storeId: 1,
@@ -84,6 +84,7 @@ describe.skip('/api/auth/employees', function() {
     });
     it('should retun one employee', async () => {
       let employee = new Employee({
+        employeeId: 1,
         firstName: 't1'
       })
       let employeeSaved = await employee.save();
@@ -105,7 +106,7 @@ describe.skip('/api/auth/employees', function() {
         employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: 1,
+        storeId: '1abc',
         position: "manager"
       });
       expect(res.status).toBe(400);
