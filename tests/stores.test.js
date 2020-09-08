@@ -137,7 +137,7 @@ describe('/api/stores', function() {
         employees: [1]
       };
       let res = await request(server).put(`/api/stores/2`).send(store);
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(404);
     });
     it('should put an object in db', async () => {
       let store = {

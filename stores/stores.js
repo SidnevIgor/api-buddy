@@ -43,7 +43,7 @@ router.put('/:id', validateId, async (req, res) => {
     //let store = await Store.findOneAndUpdate({ "storeId": req.params.id }, { ...req.body });
     let store = await Store.findOne({ "storeId": req.params.id });
     if(!store) {
-      return res.status(400).send('There is no store with a chosen id');
+      return res.status(404).send('There is no store with a chosen id');
     }
     return res.send(req.body);
   }

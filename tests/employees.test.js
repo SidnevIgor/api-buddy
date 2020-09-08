@@ -114,12 +114,13 @@ describe('/api/employees', function() {
     });
     it('should throw an error when id is not found', async () => {
       let employee = {
+        employeeId: 1,
         firstName: "Igor2",
         lastName: "Sidnev",
-        storeId: "5f22e7c0f401da21084d739d",
+        storeId: 1,
         position: "manager"
       };
-      let res = await request(server).put(`/api/employees/2`).send(employee);
+      let res = await request(server).put(`/api/employees/30`).send(employee);
       expect(res.status).toBe(400);
     });
     it('should throw an error when store id is not valid', async () => {

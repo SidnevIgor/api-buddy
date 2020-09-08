@@ -13,6 +13,7 @@ describe('/api/auth/stores', function() {
       server = require('../index');
     }
     employee = new Employee({
+      employeeId: 1,
       firstName: "Igor2",
       lastName: "Sidnev",
       storeId: 1,
@@ -167,10 +168,10 @@ describe('/api/auth/stores', function() {
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
-        employees: [employee._id]
+        employees: [1]
       };
-      let res = await request(server).put(`/api/auth/stores/2`).set('x-auth-token', token).send(store);
-      expect(res.status).toBe(400);
+      let res = await request(server).put(`/api/auth/stores/222`).set('x-auth-token', token).send(store);
+      expect(res.status).toBe(404);
     });
     it('should throw 400 error', async () => {
       let store = {
@@ -179,7 +180,7 @@ describe('/api/auth/stores', function() {
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
-        employees: [employee._id]
+        employees: [1]
       };
       let savedStore = await Store.collection.insertMany([{...store}]);
 
