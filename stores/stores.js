@@ -9,11 +9,11 @@ const { Store, schema } = require('./storeSchema');
 router.get('/', async (req, res) => {
   let stores = [];
   if(req.query) {
-    stores = await Store.find({ ...req.query }).sort({ [req.query.sortBy]: 1 });
+    stores = await Store.find({ ...req.query });
     if(stores.length === 0) return res.status(404).send('There is no stores with such parameters');
   }
   else {
-    stores = await Store.find().sort({ [req.query.sortBy]: 1 });
+    stores = await Store.find();
   }
   return res.send(cleanResponse(stores));
 });

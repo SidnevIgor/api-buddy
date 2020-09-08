@@ -9,11 +9,11 @@ const { Book, schema } = require('./bookSchema'); //here we create a class based
 router.get('/', async (req, res) => {
   let books = [];
   if(req.query) {
-    books = await Book.find({ ...req.query }).sort({ [req.query.sortBy]: 1 });
+    books = await Book.find({ ...req.query });
     if(books.length === 0) return res.status(404).send('There is no books with such parameters');
   }
   else {
-    books = await Book.find().sort({ [req.query.sortBy]: 1 });
+    books = await Book.find();
   }
   return res.send(cleanResponse(books));
 });
