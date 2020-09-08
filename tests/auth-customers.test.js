@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken');
 let server, customer, token, result;
 const { Customer } = require('../customers/customers');
 
-describe.skip('/api/auth/customers', function() {
+describe('/api/auth/customers', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
     }
     customer = new Customer({
-      customerId: 1,
+      customerId: 20,
       firstName: "name5",
       lastName: "lname4",
       email: "test@gmail.com",
@@ -84,6 +84,7 @@ describe.skip('/api/auth/customers', function() {
     });
     it('should retun one customer', async () => {
       let customer = new Customer({
+        customerId: 1,
         firstName: 't1'
       })
       let customersaved = await customer.save();
@@ -134,7 +135,7 @@ describe.skip('/api/auth/customers', function() {
         email: "test@gmail.com",
         tel: "123-456-789"
       };
-      let res = await request(server).put(`/api/auth/customers/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(customer);
+      let res = await request(server).put(`/api/auth/customers/2`).set('x-auth-token', token).send(customer);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
