@@ -7,7 +7,7 @@ const { Store } = require('../stores/storeSchema');
 const { Employee } = require('../employees/employerSchema');
 const { Customer } = require('../customers/customerSchema');
 
-describe.skip('/api/auth/stores', function() {
+describe('/api/auth/stores', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
@@ -96,6 +96,7 @@ describe.skip('/api/auth/stores', function() {
     });
     it('should retun one Store', async () => {
       let store = new Store({
+        storeId: 1,
         city: 't1'
       })
       let storeSaved = await store.save();
@@ -119,7 +120,7 @@ describe.skip('/api/auth/stores', function() {
         street: 'Novosibirskaya',
         building: '6',
         postcode: '107497',
-        employees: ['1234']
+        employees: ['1234abc']
       };
       let res = await request(server).post('/api/auth/stores').set('x-auth-token', token).send({...store});
       expect(res.status).toBe(400);
@@ -153,9 +154,10 @@ describe.skip('/api/auth/stores', function() {
     });
     it('should throw an error when validation is not passed', async () => {
       let store = {
+        storeId: 1,
         city: "Store9"
       };
-      let res = await request(server).put(`/api/auth/stores/5f2178c4b1ef5441280c2366`).set('x-auth-token', token).send(store);
+      let res = await request(server).put(`/api/auth/stores/1`).set('x-auth-token', token).send(store);
       expect(res.status).toBe(400);
     });
     it('should throw an error when id is not found', async () => {
@@ -187,7 +189,7 @@ describe.skip('/api/auth/stores', function() {
         street: 'Novosibirskaya',
         building: '7',
         postcode: '107497',
-        employees: ['1234']
+        employees: ['1234abc']
       });
       expect(res.status).toBe(400);
     });
