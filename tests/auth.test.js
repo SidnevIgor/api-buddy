@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 let server, customer;
 const { Customer } = require('../customers/customers');
 
-describe.skip('Testing auth validation', () => {
+describe('Testing auth validation', () => {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
