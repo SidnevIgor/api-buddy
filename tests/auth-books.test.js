@@ -6,7 +6,7 @@ let server, customer, token, result;
 const { Book } = require('../books/bookSchema');
 const { Customer } = require('../customers/customers');
 
-describe.skip('/api/auth/books', function() {
+describe('/api/auth/books', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
@@ -86,6 +86,7 @@ describe.skip('/api/auth/books', function() {
     });
     it('should retun one book', async () => {
       let book = new Book({
+        bookId: 1,
         title: 't1'
       })
       let bookSaved = await book.save();
