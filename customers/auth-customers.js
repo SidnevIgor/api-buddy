@@ -9,14 +9,9 @@ const { Customer, schema } = require('./customerSchema');
 
 
 router.get('/', auth, async (req, res) => {
-  let customers = [];
-  if(req.query) {
-    customers = await Customer.find({ ...req.query });
-    if(customers.length === 0) return res.status(404).send('There is no customers with such parameters');
-  }
-  else {
-    customers = await Customer.find();
-  }
+  let customers = await Customer.find({ ...req.query });
+  if(customers.length === 0) return res.status(404).send('There is no customers with such parameters');
+
   return res.send(cleanResponse(customers));
 });
 router.get('/:id', auth, validateId, async (req, res) => {

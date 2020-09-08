@@ -7,14 +7,9 @@ const cleanResponse = require('../middleware/cleanResponse');
 const { Order, schema } = require('./orderSchema');
 
 router.get('/', async (req, res) => {
-  let orders = [];
-  if(req.query) {
-    orders = await Order.find({ ...req.query });
-    if(orders.length === 0) return res.status(404).send('There is no orders with such parameters');
-  }
-  else {
-    orders = await Order.find();
-  }
+  let orders = await Order.find({ ...req.query });
+  if(orders.length === 0) return res.status(404).send('There is no orders with such parameters');
+
   return res.send(cleanResponse(orders));
 });
 router.get('/:id', validateId, async (req, res) => {

@@ -7,14 +7,9 @@ const cleanResponse = require('../middleware/cleanResponse');
 const { Store, schema } = require('./storeSchema');
 
 router.get('/', async (req, res) => {
-  let stores = [];
-  if(req.query) {
-    stores = await Store.find({ ...req.query });
-    if(stores.length === 0) return res.status(404).send('There is no stores with such parameters');
-  }
-  else {
-    stores = await Store.find();
-  }
+  let stores = await Store.find({ ...req.query });
+  if(stores.length === 0) return res.status(404).send('There is no stores with such parameters');
+
   return res.send(cleanResponse(stores));
 });
 router.get('/:id', validateId, async (req, res) => {

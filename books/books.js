@@ -7,14 +7,9 @@ const cleanResponse = require('../middleware/cleanResponse');
 const { Book, schema } = require('./bookSchema'); //here we create a class based on mongoose schema
 
 router.get('/', async (req, res) => {
-  let books = [];
-  if(req.query) {
-    books = await Book.find({ ...req.query });
-    if(books.length === 0) return res.status(404).send('There is no books with such parameters');
-  }
-  else {
-    books = await Book.find();
-  }
+  let  books = await Book.find({ ...req.query });
+  if(books.length === 0) return res.status(404).send('There is no books with such parameters');
+
   return res.send(cleanResponse(books));
 });
 router.get('/:id', validateId, async (req, res) => {
