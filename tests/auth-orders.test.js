@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 let server, employee, result, token, customer;
 const { Order } = require('../orders/orderschema');
 const { Employee } = require('../employees/employees');
+const { Customer } = require('../customers/customerSchema');
 
-describe.skip('/api/orders', function() {
+describe('/api/orders', function() {
   beforeEach( async () => {
     if(!server) {
       server = require('../index');
@@ -32,6 +33,7 @@ describe.skip('/api/orders', function() {
     server.close();
     await Order.remove({});
     await Employee.remove({});
+    await Customer.remove({});
   });
 
   describe('GET all orders', () => {
@@ -93,6 +95,7 @@ describe.skip('/api/orders', function() {
     });
     it('should return one Order', async () => {
       let order = new Order({
+        orderId: 1,
         orderTotal: 100
       })
       let orderSaved = await order.save();
