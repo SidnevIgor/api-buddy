@@ -1,4 +1,5 @@
 {
   "name": "API-buddy app",
-  "db": "mongodb://api-user:Qazwazzaq__6@ds161312.mlab.com:61312/api-buddy"
+  "db": "mongodb://api-user:Qazwazzaq__6@ds161312.mlab.com:61312/api-buddy",
+  "secret": "1234"
 }
