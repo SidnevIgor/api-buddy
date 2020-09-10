@@ -1,0 +1,4 @@
+{
+  "name": "API-buddy app",
+  "db": "mongodb://localhost/playground"
+}
