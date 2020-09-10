@@ -1,4 +1,5 @@
 {
   "name": "API-buddy app - Development",
-  "secret": "api-buddy-secret"
+  "secret": "api-buddy-secret",
+  "db": "api-db"
 }
