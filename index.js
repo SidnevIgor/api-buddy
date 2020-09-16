@@ -7,6 +7,7 @@ const helmet = require('helmet'); //protecting routes
 const mongoose = require('mongoose'); //this allows to talk with MongoDB
 const timeout = require('connect-timeout'); //this allows to stop trying to connect after a certain time
 var winston = require('winston');
+const cors = require('cors');
 
 const home = require('./home/home');
 const books = require('./books/books');
@@ -38,6 +39,7 @@ process.on('uncaughtException', (ex) => {
   process.exit(1);
 }); //checking for errors outside of routes (sync erros)
 
+app.use(cors());
 app.use(express.json()); //enabling JSON parsing
 app.use(timeout('7s')); //we give 7 sec until timeout error
 app.use(helmet());
