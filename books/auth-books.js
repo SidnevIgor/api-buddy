@@ -47,7 +47,7 @@ router.delete('/:id', auth, validateId, async (req, res) => {
   if(!book) {
     return res.status(400).send('There is no book with a chosen id');
   }
-  return res.send(book);
+  return res.send(cleanResponse(book));
 });
 
 module.exports = router;

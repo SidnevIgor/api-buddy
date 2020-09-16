@@ -55,7 +55,7 @@ router.delete('/:id', validateId, async (req, res) => {
   if(!order) {
     return res.status(400).send('There is no order with a chosen id');
   }
-  return res.send(order);
+  return res.send(cleanResponse(order));
 });
 
 module.exports = router;

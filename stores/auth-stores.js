@@ -59,7 +59,7 @@ router.delete('/:id', auth, validateId, async (req, res) => {
   if(!store) {
     return res.status(400).send('There is no store with a chosen id');
   }
-  return res.send(store);
+  return res.send(cleanResponse(store));
 });
 
 module.exports = router;

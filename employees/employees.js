@@ -57,7 +57,7 @@ router.delete('/:id', validateId, async (req, res) => {
   if(!employee) {
     return res.status(400).send('There is no employee with a chosen id');
   }
-  return res.send(employee);
+  return res.send(cleanResponse(employee));
 });
 
 module.exports = router;
