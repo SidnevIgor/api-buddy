@@ -8,7 +8,7 @@ const { Customer, schema } = require('./customerSchema');
 
 
 router.get('/', async (req, res) => {
-  let customers = await Customer.find({ ...req.query });
+  let customers = await Customer.find({ ...req.query }).sort({customerId: -1});
   if(customers.length === 0) return res.status(404).send('There is no customers with such parameters');
 
   return res.send(cleanResponse(customers));
