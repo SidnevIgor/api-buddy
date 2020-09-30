@@ -6,7 +6,8 @@ const bookSchema = mongoose.Schema({ //here we create a mongoose schema
   genre: String,
   price: Number,
   issueDate: { type: Date, default: Date.now },
-  publisher: String
+  publisher: String,
+  imageUrl: String
 }, { versionKey: false });
 
 const Book = mongoose.model('Book', bookSchema); //here we create a class based on mongoose schema
@@ -20,7 +21,8 @@ const schema = Joi.object({
   genre: Joi.string().required(),
   price: Joi.number().required(),
   issueDate: Joi.date().required(),
-  publisher: Joi.string().required()
+  publisher: Joi.string().required(),
+  imageUrl: Joi.string().required()
 }); //here we describe the schema of Joi
 
 module.exports.Book = Book;
