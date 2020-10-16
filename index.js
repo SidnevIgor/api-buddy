@@ -8,7 +8,7 @@ const mongoose = require('mongoose'); //this allows to talk with MongoDB
 const timeout = require('connect-timeout'); //this allows to stop trying to connect after a certain time
 var winston = require('winston');
 const cors = require('cors');
-//check
+
 const home = require('./home/home');
 const books = require('./books/books');
 const authBooks = require('./books/auth-books');
