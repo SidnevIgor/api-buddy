@@ -24,11 +24,14 @@ router.post('/', async (req, res) => {
     let result = await customer.save();
   }
   let token = jwt.sign({_id: customer._id || result._id}, config.get('secret'));
-  res.header('x-auth-token', token).send({
+  /*res.header('x-auth-token', token).send({
     firstName: customer.firstName,
     lastName: customer.lastName,
     email: customer.email,
     tel: customer.tel
+  });*/
+  res.send({
+    'x-auth-token': token
   });
 });
 
