@@ -1,5 +1,5 @@
 {
-  "name": "API-buddy app",
-  "db": "mongodb://api-user:Qazwazzaq__6@ds161312.mlab.com:61312/api-buddy",
+  "name": "API-buddy app production",
+  "db": "mongodb+srv://api-buddy-client:api-buddy-secret@api-buddy-ver2.6qfi4.mongodb.net/api-buddy-ver2?retryWrites=true&w=majority",
   "secret": "1234"
 }
