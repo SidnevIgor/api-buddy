@@ -10,17 +10,14 @@ var winston = require('winston');
 const cors = require('cors');
 
 const home = require('./home/home');
-const books = require('./books/books');
-const authBooks = require('./books/auth-books');
+const goals = require('./goals/goals');
+const authBooks = require('./goals/auth-goals');
 const customers = require('./customers/customers').router;
 const authCustomers = require('./customers/auth-customers').router;
-const stores = require('./stores/stores');
-const authStores = require('./stores/auth-stores');
-const orders = require('./orders/orders');
-const authOrders = require('./orders/auth-orders');
-const employees = require('./employees/employees');
-const authEmployees = require('./employees/auth-employees');
+const lists = require('./lists/lists');
+const authLists = require('./lists/auth-lists');
 const auth = require('./auth/auth');
+const authGuest = require('./auth/auth-guest');
 const error = require('./middleware/error');
 
 if(!config.get('secret')) { //we check if secret var (api-buddy-secret) is set
@@ -44,17 +41,14 @@ app.use(express.json()); //enabling JSON parsing
 app.use(timeout('7s')); //we give 7 sec until timeout error
 app.use(helmet());
 
-app.use('/api/books', books);
+app.use('/api/goals', goals);
 app.use('/api/customers', customers);
-app.use('/api/stores', stores);
-app.use('/api/orders', orders);
-app.use('/api/employees', employees);
+app.use('/api/lists', lists);
 
 app.use('/api/auth/books', authBooks);
 app.use('/api/auth/customers', authCustomers);
-app.use('/api/auth/employees', authEmployees);
-app.use('/api/auth/orders', authOrders);
-app.use('/api/auth/stores', authStores);
+app.use('/api/auth/lists', authLists);
+app.use('/api/auth-guest', authGuest);
 app.use('/api/auth', auth);
 
 app.use('/', home);
