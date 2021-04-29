@@ -1,5 +1,4 @@
 {
   "name": "API-buddy app default",
-  "db": "mongodb://localhost/hundred_goals",
-  "secret": "api-buddy-secret"
+  "db": "mongodb+srv://api-buddy-client:api-buddy-secret@api-buddy-ver2.6qfi4.mongodb.net/api-buddy-ver2?retryWrites=true&w=majority"
 }

@@ -5,29 +5,27 @@ const validateId = require('../middleware/validateId');
 const auth = require('../middleware/auth');
 const cleanResponse = require('../middleware/cleanResponse');
 
-const { List, schema } = require('./listSchema');
+const { Order, schema } = require('./orderSchema');
 
 router.get('/', auth, async (req, res) => {
-  let lists = await List.find({ ...req.query });
-  if(lists.length === 0) return res.status(404).send('There is no lists with such parameters');
+  let orders = await Order.find({ ...req.query });
+  if(orders.length === 0) return res.status(404).send('There is no orders with such parameters');
 
-  return res.send(lists);
+  return res.send(cleanResponse(orders));
 });
 router.get('/:id', auth, validateId, async (req, res) => {
-  let list = await List.findOne({_id: req.params.id});
-  if(!list) return res.status(404).send('There is no list with such id');
-  return res.send(list);
+  let order = await Order.findOne({orderId: req.params.id});
+  if(!order) return res.status(404).send('There is no order with such id');
+  return res.send(cleanResponse(order));
 });
 
 router.post('/', auth, async (req, res) => {
   const validation = schema.validate(req.body); //here we validate the schema and req.body
   if(validation.error) { return res.status(400).send(validation.error); }
-
-  let list = new List({...req.body});
-
+  let order = new Order({...req.body});
   try {
-    let result = await list.save();
-    return res.send(result);
+    //let result = await order.save();
+    return res.send(cleanResponse(order));
   }
   catch(e) {
     return res.status(400).send(e.message);
@@ -39,12 +37,11 @@ router.put('/:id', auth, validateId, async (req, res) => {
   if(validation.error) {
     return res.status(400).send(validation.error);
   }
-
   try {
-    let list = await List.findOneAndUpdate({ "_id": req.params.id }, { ...req.body });
-    //let store = await Store.findOne({ "storeId": req.params.id });
-    if(!list) {
-      return res.status(404).send('There is no list with a chosen id');
+    //let order = await Order.findOneAndUpdate({ "orderId": req.params.id }, { ...req.body });
+    let order = await Order.findOne({ "orderId": req.params.id });
+    if(!order) {
+      return res.status(400).send('There is no order with a chosen id');
     }
     return res.send(req.body);
   }
@@ -54,12 +51,12 @@ router.put('/:id', auth, validateId, async (req, res) => {
 });
 
 router.delete('/:id', auth, validateId, async (req, res) => {
-  let list = await List.deleteOne({"_id": req.params.id});
-  //let store = await Store.findOne({ "storeId": req.params.id });
-  if(!list) {
-    return res.status(400).send('There is no list with a chosen id');
+  //let order = await Order.deleteOne({"orderId": req.params.id});
+  let order = await Order.findOne({ "orderId": req.params.id });
+  if(!order) {
+    return res.status(400).send('There is no order with a chosen id');
   }
-  return res.send(list);
+  return res.send(cleanResponse(order));
 });
 
 module.exports = router;
